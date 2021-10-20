@@ -13,6 +13,7 @@ def get_block(block_id: int) -> dict:
 
 
 # reads transaction data from the sequencer
+@lru_cache()
 def get_transaction(transaction_id: int) -> dict:
     url = f'{SEQUENCER}/get_transaction?transactionId={transaction_id}'
     result = requests.get(url).json()
