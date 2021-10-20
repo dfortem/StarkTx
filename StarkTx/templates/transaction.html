@@ -10,9 +10,9 @@
     <a style="color: darkgreen" href="https://voyager.online/tx/{{ tx_id }}" target="_blank">{{- tx_id -}}</a>
 {% endmacro %}
 
-{% macro voyager_block_link(block_id) %}
+{%- macro voyager_block_link(block_id) -%}
     <a style="color: darkred" href="https://voyager.online/block/{{ block_id }}" target="_blank">{{- block_id -}}</a>
-{% endmacro %}
+{%- endmacro -%}
 
 {% macro etherscan_address_link(address, label, badge="") %}
     {%- if address -%}
@@ -106,7 +106,7 @@
             <div class="transaction-info">
                 <div>
                     {% if transaction.block_id %}
-                        Block: <span style='color: darkred'>{{ voyager_block_link(transaction.block_id) }}/{{ transaction.block_number }} </span>
+                        Block: <span style='color: darkred'>{{ voyager_block_link(transaction.block_id) -}}/{{ transaction.block_number }} </span>
                     {% else %}
                         Block: <span style='color: darkred'>Transaction failed</span>
                     {% endif %}
