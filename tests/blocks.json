@@ -1,0 +1,72 @@
+{
+  "state_root": "0121f91ec4fc65cb01fd328915c730607d26c56ab49ba5387869f025517d733e",
+  "transactions": {
+    "291721": {
+      "contract_address": "0x3edbd97a960f90a5479e2e1e06adc1183dfa33c8eeac77154ac92ff7edf13e2",
+      "type": "DEPLOY"
+    },
+    "291722": {
+      "entry_point_selector": "0x3d7905601c217734671143d457f0db37f7f8883112abd34b92c4abfeafde0c3",
+      "contract_address": "0x1c441e95f32b69756871b2a2f5aae5c5e848e7685d855b7978ee35c5502df1f",
+      "calldata": [
+        "1643834545769021526975065127241196083136329327842943844449879708438390050220",
+        "1065825118048562210592517796344333107927424559662652081520690802886423015667"
+      ],
+      "entry_point_type": "EXTERNAL",
+      "type": "INVOKE_FUNCTION"
+    },
+    "291723": {
+      "entry_point_selector": "0x317eb442b72a9fae758d4fb26830ed0d9f31c8e7da4dbff4e8c59ea6a158e7f",
+      "contract_address": "0x1db2919856178dfb6e461a52389b2448581c443daa7c1f7d41ec409e1ecb7d9",
+      "calldata": [
+        "110302428364059674089356624876947139763719802062580733695142117967286210493",
+        "2",
+        "2309477327653733630732490255026043979213156074637260977802604278806105411614",
+        "1171158663389869930670114074811630616347766768183429188165257302871289682833"
+      ],
+      "entry_point_type": "EXTERNAL",
+      "type": "INVOKE_FUNCTION"
+    },
+    "291724": {
+      "entry_point_selector": "0x19a35a6e95cb7a3318dbb244f20975a1cd8587cc6b5259f15f61d7beb7ee43b",
+      "contract_address": "0xfe7b4a08def938843bd1ed42a7a9fc3c2f0a84fcfe31a663bc29aa3da9ab81",
+      "calldata": [
+        "389001370799231880742937952655411133922746308293885574670488136445462966167",
+        "443045403498192722748015289635033333411296572616177925149817930617996068691"
+      ],
+      "entry_point_type": "EXTERNAL",
+      "type": "INVOKE_FUNCTION"
+    }
+  },
+  "status": "ACCEPTED_ONCHAIN",
+  "timestamp": 1634711242,
+  "previous_block_id": 48118,
+  "transaction_receipts": {
+    "291722": {
+      "status": "ACCEPTED_ONCHAIN",
+      "transaction_id": 291722,
+      "transaction_index": 1,
+      "l2_to_l1_messages": [],
+      "block_id": 48119,
+      "block_number": 48105
+    },
+    "291723": {
+      "status": "ACCEPTED_ONCHAIN",
+      "transaction_id": 291723,
+      "transaction_index": 2,
+      "l2_to_l1_messages": [],
+      "block_id": 48119,
+      "block_number": 48105
+    },
+    "291724": {
+      "status": "ACCEPTED_ONCHAIN",
+      "transaction_id": 291724,
+      "transaction_index": 3,
+      "l2_to_l1_messages": [],
+      "block_id": 48119,
+      "block_number": 48105
+    }
+  },
+  "block_id": 48119,
+  "sequence_number": 48105
+}

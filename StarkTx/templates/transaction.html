@@ -1,0 +1,174 @@
+{% macro voyager_contract_link(address, label) %}
+    {%- if address -%}
+        <a href="https://voyager.online/contract/{{ address }}" target="_blank">{{- label -}}</a>
+    {%- else -%}
+        {{- label -}}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro voyager_transaction_link(tx_id) %}
+    <a style="color: darkgreen" href="https://voyager.online/tx/{{ tx_id }}" target="_blank">{{- tx_id -}}</a>
+{% endmacro %}
+
+{% macro voyager_block_link(block_id) %}
+    <a style="color: darkred" href="https://voyager.online/block/{{ block_id }}" target="_blank">{{- block_id -}}</a>
+{% endmacro %}
+
+{% macro etherscan_address_link(address, label, badge="") %}
+    {%- if address -%}
+        <a href="https://etherscan.io/address/{{ address }}" target="_blank">
+            {{- label -}}
+        </a>
+    {%- else -%}
+        {{- label -}}
+    {%- endif -%}
+{% endmacro %}
+
+{%- macro print_call_arguments(arguments) -%}
+    {%- if arguments is not none -%}
+        {%- for argument in arguments -%}
+            {% if argument.type != "ignore" %}
+                {%- if loop.index > 1 -%}, {% endif %}
+                {%- if argument.name == "[no ABI]" -%}
+                    <span class="badge badge-danger">no_ABI</span>
+                {%- else -%}
+                    {%- if argument.name %}<span style='color: darkred'>{{- argument.name -}}=</span>{%- endif -%}
+                    {%- if argument.type == "tuple" -%}
+                        ({{- print_call_arguments(argument.value) -}})
+                    {%- elif argument.type == "tuple[]" -%}
+                        [
+                        {%- for sub_arg in argument.value -%}
+                            {%- if loop.index > 1 -%}, {% endif %}
+                            ({{- print_call_arguments(sub_arg) -}})
+                        {%- endfor -%}
+                        ]
+                    {%- elif argument.type == "address" -%}
+                        {{- address_link(argument.value.address, argument.value.name, argument.value.badge) -}}
+                    {%- elif argument.type == "nft" -%}
+                        {{- nft_link(argument.value.address, argument.value.name) -}}
+                    {% elif argument.type == "call" %}
+                        {{- address_link(argument.value.address, argument.value.name, argument.value.badge) -}}.
+                        <span style="color: darkgreen">{{- argument.value.function_name -}}</span>(
+                        {{- print_event_arguments(argument.value.arguments) -}})
+                    {%- else -%}
+                        {{- argument.value -}}
+                    {%- endif -%}
+                {%- endif -%}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endif -%}
+{%- endmacro -%}
+
+
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;700&amp;display=swap" rel="preload stylesheet"
+          as="style" crossorigin="anonymous">
+    <link rel="preload stylesheet" type="text/css" as="style" crossorigin="anonymous"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <style>
+        :root {
+            --text: #000;
+            --text-alt: #717171;
+            --background: #FFF;
+            --background-alt: #717171;
+            --background-muted: #EFEFEF;
+            --border: #C4C4C4;
+            --link: #337AB8;
+        }
+    </style>
+
+    <title>StarkTx.info Analysis {{ transaction.transaction_id }}</title>
+
+    <link href="//cdn.jsdelivr.net/npm/jquery.fancytree@2.27/dist/skin-win8/ui.fancytree.min.css" rel="stylesheet">
+    <script src="/static/jquery.min.js"></script>
+    <script src="/static/jquery.fancytree-all-deps.min.js"></script>
+    <link href="/static/ethtx.new.css" rel="stylesheet">
+    <link href="/static/hosted.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div>
+    <div class="container-top">
+        <h3>
+            <a title="Home" href="/">
+                <i class="fas fa-home "></i>
+            </a> Analysis for StarkNet transaction: <span class="transaction-hash">{{ voyager_transaction_link(transaction.transaction_id) }}</span>
+        </h3>
+        <div class="container-info-logo">
+            <div class="transaction-info">
+                <div>
+                    {% if transaction.block_id %}
+                        Block: <span style='color: darkred'>{{ voyager_block_link(transaction.block_id) }}/{{ transaction.block_number }} </span>
+                    {% else %}
+                        Block: <span style='color: darkred'>Transaction failed</span>
+                    {% endif %}
+                    {% if transaction.timestamp %}
+                        at <span style='color: darkred'>{{ transaction.timestamp }}</span> UTC
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="calls">
+    <h3>Execution trace:</h3>
+    <div id="tree">
+        <ul class="tree">
+            <li>
+                <p>
+                    {% if transaction.error %}
+                        <span style='color: red'>({{ transaction.error }})</span>
+                    {% endif %}
+                    {% if transaction.type == 'INVOKE_FUNCTION' %}
+                        <span>{{- voyager_contract_link(transaction.contract, transaction.contract_name) -}}</span><span style='color: darkgreen'>.{{- transaction.function -}}</span><span>({{- print_call_arguments(transaction.inputs) -}}) => ({{- print_call_arguments(transaction.outputs) -}})</span>
+                    {% elif transaction.type == 'DEPLOY' %}
+                        <span>Deploy contract: {{ voyager_contract_link(transaction.contract, transaction.contract) }}</span>
+                    {% endif %}
+                </p>
+            </li>
+        </ul>
+    </div>
+</div>
+
+{% if transaction.l2_to_l1 %}
+    <div class="calls">
+        <h3>L2 to L1 transactions:</h3>
+        <div id="tx_tree">
+            <ul class="tree">
+                <li>
+                    {% for l2_l1_transaction in transaction.l2_to_l1 %}
+                        <p style="margin-bottom: 5px">
+                            <span>{{- voyager_contract_link(l2_l1_transaction.from_address, l2_l1_transaction.from_address[:10]) }} -> {{ etherscan_address_link(l2_l1_transaction.to_address, l2_l1_transaction.to_address|lower) -}}</span><span>({{- l2_l1_transaction.payload  -}})</span>
+                        </p><br>
+                    {% endfor %}
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endif %}
+
+</div>
+
+<script>
+    $(document).ready(() => {
+        $("#tree").fancytree({
+            minExpandLevel: 2,
+            toggleEffect: false,
+        });
+        $("#tx_tree").fancytree({
+            minExpandLevel: 2,
+            toggleEffect: false,
+        });
+    });
+</script>
+</body>
+</html>
