@@ -31,7 +31,8 @@ def decode_parameters(parameters, parameters_abi):
             if function_abi:
                 function_name = function_abi['name']
                 function_inputs = decode_parameters(decoded_parameters[2]['value'], function_abi['inputs'])
-                decoded_parameters = [dict(name='call', value=f"{semantics['name']}.{function_name}({function_inputs})")]
+                input_string = ', '.join([f"{_input['name']}={_input['value']}" for _input in function_inputs])
+                decoded_parameters = [dict(name='call', value=f"{semantics['name']}.{function_name}({input_string})")]
 
     return decoded_parameters
 
