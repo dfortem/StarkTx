@@ -1,13 +1,11 @@
 import pickle
 
-from stark_tx.providers.sequencer import get_block, get_transaction
-from stark_tx.providers.semantics import load_semantics, store_semantics
-from stark_tx.decoders.transaction import decode_transaction
-from stark_tx.templates.output import print_transaction
+from stark_tx.engine.decoders.transaction import decode_transaction
+from stark_tx.engine.providers.sequencer import get_block, get_transaction
+from stark_tx.frontend.output import print_transaction
 
 
 def starktx_transaction(transaction_id: int) -> dict:
-
     raw_transaction = get_transaction(transaction_id)
     raw_block = (
         get_block(raw_transaction["block_id"])
@@ -21,7 +19,6 @@ def starktx_transaction(transaction_id: int) -> dict:
 
 
 def starktx_block(block_id: int) -> []:
-
     raw_block = get_block(block_id)
     decoded_transactions = []
     for index, (transaction_id, block_transaction) in enumerate(
@@ -47,18 +44,17 @@ def store_transactions(batch: [], block: int):
     pickle.dump(batch, open(f"artefacts/blocks_{block}.pickle", "wb"))
 
 
-load_semantics()
-
-min_block = 9900
-max_block = 50000
-chunk_size = 100
-for start_block in range(min_block, max_block, chunk_size):
-    transactions_batch = []
-    for block_id in range(start_block, start_block + chunk_size):
-        transactions_batch += starktx_block(block_id)
-    store_transactions(transactions_batch, start_block)
-    store_semantics()
-
-store_semantics()
+# TODO: ???
+# min_block = 9900
+# max_block = 50000
+# chunk_size = 100
+# for start_block in range(min_block, max_block, chunk_size):
+#     transactions_batch = []
+#     for block_id in range(start_block, start_block + chunk_size):
+#         transactions_batch += starktx_block(block_id)
+#     store_transactions(transactions_batch, start_block)
+#     store_semantics()
+#
+# store_semantics()
 
 # failed transaction: 260219
