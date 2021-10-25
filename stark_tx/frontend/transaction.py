@@ -5,7 +5,7 @@ from stark_tx.engine.providers.sequencer import get_transaction, get_block
 from stark_tx.frontend import frontend_route
 from stark_tx.frontend.output import print_transaction
 
-bp = Blueprint("transaction", __name__)
+bp = Blueprint("transactions", __name__)
 
 
 @frontend_route(bp, "/<int:tx_id>")
