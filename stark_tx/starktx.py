@@ -25,7 +25,7 @@ load_semantics()
 
 @app.route("/")
 def route_home():
-    return "<p>StarkNet transaction decoder...</p>"
+    return render_template("index.html"), 200
 
 
 @app.route("/<int:tx_id>")
