@@ -1,0 +1,16 @@
+repos:
+  - repo: https://github.com/psf/black
+    rev: 19.3b0
+    hooks:
+      - id: black
+        language_version: python3.9
+        name: StarkWare:black
+        alias: stark_ware-black
+
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: 4.0.1
+    hooks:
+      - id: flake8
+        language_version: python3.9
+        name: StarkWare:flake8
+        alias: stark_ware-flake8

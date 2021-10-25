@@ -1,15 +1,14 @@
 import argparse
 import json
-import web3
-from web3.exceptions import InvalidAddress
-from typing import Dict, List
-import os
 import logging
+import os
 from typing import Dict, List
 
+import web3
 from eth_typing.encoding import HexStr
 from web3 import Web3
 from web3.contract import Contract
+from web3.exceptions import InvalidAddress
 
 logger = logging.getLogger(__name__)
 
@@ -24,12 +23,17 @@ def _initialize_memory_page_map(
     memory_page_contract_event = (
         memory_page_fact_registry_contract.events.LogMemoryPageFactContinuous
     )
-    logger.info(f"Constructing memory pages dictionary for blocks [{from_block}, {to_block}].")
+    logger.info(
+        f"Constructing memory pages dictionary for blocks [{from_block}, {to_block}]."
+    )
     memory_page_events = get_contract_events(
-        contract_event=memory_page_contract_event, from_block=from_block, to_block=to_block
+        contract_event=memory_page_contract_event,
+        from_block=from_block,
+        to_block=to_block,
     )
     return {
-        event["args"]["memoryHash"]: event["transactionHash"].hex() for event in memory_page_events
+        event["args"]["memoryHash"]: event["transactionHash"].hex()
+        for event in memory_page_events
     }
 
 
@@ -44,7 +48,8 @@ def _initialize_fact_memory_hashes_map(
     for statement_verifier_impl_contract in statement_verifier_impl_contracts:
         # Asserts that the contract is a statement verifier implementation contract.
         assert (
-            "GpsStatementVerifier" in statement_verifier_impl_contract.functions.identify().call()
+            "GpsStatementVerifier"
+            in statement_verifier_impl_contract.functions.identify().call()
         ), (
             f"Contract with address {statement_verifier_impl_contract.address} is not a "
             "statement verifier contract."
@@ -91,7 +96,7 @@ class MemoryPagesFetcher:
         web3: Web3,
         from_block: int,
         gps_statement_verifier_contract: Contract,
-        memory_page_fact_registry_contract: Contract
+        memory_page_fact_registry_contract: Contract,
     ) -> "MemoryPagesFetcher":
         """
         Creates an initialized instance by reading contract logs from the given web3 provider.
@@ -144,12 +149,18 @@ class MemoryPagesFetcher:
             memory_pages_tx = self.web3.eth.getTransaction(HexStr(transaction_str))
             tx_decoded_values = self.memory_page_fact_registry_contract.decode_function_input(
                 memory_pages_tx["input"]
-            )[1]["values"]
+            )[
+                1
+            ][
+                "values"
+            ]
             memory_pages.append(tx_decoded_values)
         return memory_pages
 
 
 DEFUALT_GET_LOGS_MAX_CHUNK_SIZE = 10 ** 6
+
+
 def get_contract_events(
     contract_event,
     from_block: int,
@@ -164,7 +175,9 @@ def get_contract_events(
     """
     events = []
     assert from_block <= to_block
-    split_queries_block_nums = list(range(from_block, to_block, get_logs_max_chunk_size))
+    split_queries_block_nums = list(
+        range(from_block, to_block, get_logs_max_chunk_size)
+    )
     split_queries = [
         (query_from_block, query_to_block)
         for query_from_block, query_to_block in zip(
@@ -174,7 +187,11 @@ def get_contract_events(
 
     for query_from_block, query_to_block in split_queries:
         events.extend(
-            list(contract_event.getLogs(fromBlock=query_from_block, toBlock=query_to_block))
+            list(
+                contract_event.getLogs(
+                    fromBlock=query_from_block, toBlock=query_to_block
+                )
+            )
         )
     return events
 
@@ -191,7 +208,8 @@ def load_contracts(
     for contract_name in contracts_names:
         try:
             res[contract_name] = web3.eth.contract(
-                address=source_json[contract_name]["address"], abi=source_json[contract_name]["abi"]
+                address=source_json[contract_name]["address"],
+                abi=source_json[contract_name]["abi"],
             )
         except (KeyError, InvalidAddress) as ex:
             raise ex
@@ -199,25 +217,38 @@ def load_contracts(
 
 
 def main():
-    GOERLI_NODE = 'https://goerli.infura.io/v3/efaaed1253b8458abf2b8669ae9e9223'
+    GOERLI_NODE = "https://goerli.infura.io/v3/efaaed1253b8458abf2b8669ae9e9223"
     contract_names = ["GpsStatementVerifier", "MemoryPageFactRegistry"]
 
     parser = argparse.ArgumentParser()
-    
+
     # Note that Registration of memory pages happens before the state update transaction, hence
     # make sure to use from_block which preceeds (~500 blocks) the block of the state transition fact
-    parser.add_argument('--from_block', dest='from_block', default=5715392,
-                        help='find memory pages written after this block')
+    parser.add_argument(
+        "--from_block",
+        dest="from_block",
+        default=5715392,
+        help="find memory pages written after this block",
+    )
 
-    parser.add_argument('--web3_node', dest='web3_node', default=GOERLI_NODE,
-                        help='rpc node url')
+    parser.add_argument(
+        "--web3_node", dest="web3_node", default=GOERLI_NODE, help="rpc node url"
+    )
 
-    parser.add_argument('--contracts_abi_file', dest='contracts_abi_file', default="contracts.json",
-                        help='name of the json file containing the abi of the GpsVerifier and MemoryPageFactRegistry')
-                       
-    parser.add_argument('--fact', dest='fact', default="5facd53c4627da085f2da81046bc21b1bef0cb82100689b3a0ff1397074b75d6",
-        help='the fact whose associated memory pages will be returned')
-        
+    parser.add_argument(
+        "--contracts_abi_file",
+        dest="contracts_abi_file",
+        default="contracts.json",
+        help="name of the json file containing the abi of the GpsVerifier and MemoryPageFactRegistry",
+    )
+
+    parser.add_argument(
+        "--fact",
+        dest="fact",
+        default="5facd53c4627da085f2da81046bc21b1bef0cb82100689b3a0ff1397074b75d6",
+        help="the fact whose associated memory pages will be returned",
+    )
+
     args = parser.parse_args()
 
     w3 = web3.Web3(web3.HTTPProvider(args.web3_node))
@@ -227,22 +258,24 @@ def main():
     contracts_dict = load_contracts(
         web3=w3, contracts_file=contracts_path, contracts_names=contract_names
     )
-    (gps_statement_verifier_contract, memory_pages_contract) = [contracts_dict[contract_name] for contract_name in contract_names]
+    (gps_statement_verifier_contract, memory_pages_contract) = [
+        contracts_dict[contract_name] for contract_name in contract_names
+    ]
 
     memory_pages_fetcher = MemoryPagesFetcher.create(
         web3=w3,
         from_block=args.from_block,
         gps_statement_verifier_contract=gps_statement_verifier_contract,
-        memory_page_fact_registry_contract=memory_pages_contract
+        memory_page_fact_registry_contract=memory_pages_contract,
     )
 
     pages = memory_pages_fetcher.get_memory_pages_from_fact(bytes.fromhex(args.fact))
 
     # Interpetation of pages
 
-    state_diff = pages[1:] # ignore first page
+    state_diff = pages[1:]  # ignore first page
     diffs = [item for page in state_diff for item in page]
-    diffs.pop(0) # num of contracts updates
+    diffs.pop(0)  # num of contracts updates
     parsed_diff = {}
     while len(diffs) > 0:
         contract_address = hex(int(diffs.pop(0)))
