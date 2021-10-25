@@ -4,7 +4,7 @@ from stark_tx.providers.sequencer import get_abi
 from stark_tx.decoders.abi import decode_abi
 
 
-semantics = dict()
+semantics = {}
 
 
 def load_semantics():
