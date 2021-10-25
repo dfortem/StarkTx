@@ -7,6 +7,7 @@ authors = ["Tomasz Mierzwa <tomek@tfi.team>, Karol Chojnowski <karol@tfi.team>"]
 [tool.poetry.dependencies]
 python = "^3.9"
 Flask = "^2.0.2"
+web3 = "^5.24.0"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "*"
