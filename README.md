@@ -16,3 +16,24 @@
 Live version of StarkTx is available here [http://starktx.info/](http://starktx.info/), with source code released
 here [StarkWare](https://github.com/TokenFlowInsights/StarkWare)
 
+## Backend local development, additional details
+
+### General workflow
+
+By default, the dependencies are managed with [Poetry](https://python-poetry.org/), go there and install it.
+
+From `./` you can install all the dependencies with:
+
+```console
+$ poetry install
+```
+
+Then you can start a shell session with the new environment with:
+
+```console
+$ poetry shell
+```
+
+Next, open your editor at `./`. That way, your editor will be able to find all the imports, etc. Make sure your editor
+uses the environment you just created with Poetry.
+
