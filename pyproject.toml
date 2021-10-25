@@ -6,6 +6,7 @@ authors = ["Tomasz Mierzwa <tomek@tfi.team>, Karol Chojnowski <karol@tfi.team>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+Flask = "^2.0.2"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "*"
@@ -18,16 +19,6 @@ multi_line_output = 3
 include_trailing_comma = true
 force_grid_wrap = 0
 line_length = 88
-
-[tool.black]
-multi_line_output = 3
-include_trailing_comma = true
-force_grid_wrap = 0
-line_length = 88
-
-[flake8]
-max-line-length = 88
-extend-ignore = "E203"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
