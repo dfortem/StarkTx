@@ -43,8 +43,8 @@ def store_transactions(batch: [], block: int):
 
 load_semantics()
 
-min_block = 6300
-max_block = 48200
+min_block = 9900
+max_block = 50000
 chunk_size = 100
 for start_block in range(min_block, max_block, chunk_size):
     transactions_batch = []
