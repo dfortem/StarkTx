@@ -32,6 +32,3 @@ def route_home():
 def route_transaction(tx_id):
     tx = starktx_transaction(tx_id)
     return render_template("transaction.html", transaction=tx), 200
-
-
-app.run()
