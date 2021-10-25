@@ -142,10 +142,11 @@
 
 <script type="text/javascript">
     function onSubmit(e) {
+        window.onbeforeunload = function () {
+            document.getElementById("tx_submit").value = "Decoding...";
+        };
         e.action = '/' + e.tx.value;
     }
-
-
 </script>
 </body>
 </html>
