@@ -1,0 +1,11 @@
+version: "3.6"
+services:
+  starkware:
+    image: '${DOCKER_IMAGE_STARKWARE?Variable not set}:${TAG-latest}'
+    env_file:
+      - .env
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        INSTALL_DEV: ${INSTALL_DEV-false}

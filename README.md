@@ -37,3 +37,14 @@ $ poetry shell
 Next, open your editor at `./`. That way, your editor will be able to find all the imports, etc. Make sure your editor
 uses the environment you just created with Poetry.
 
+### Docker
+To run an application via the docker run command (build and run):
+
+```console
+docker-compose up --build
+```
+
+in background:
+```console
+docker-compose up -d --build
+```

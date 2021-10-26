@@ -1,0 +1,12 @@
+version: "3.6"
+services:
+  starkware:
+    ports:
+      - "5000:5000"
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        INSTALL_DEV: ${INSTALL_DEV-false}
+
+    command: /app/scripts/start-reload.sh
