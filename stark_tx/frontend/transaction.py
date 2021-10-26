@@ -8,7 +8,7 @@ from stark_tx.frontend.output import print_transaction
 bp = Blueprint("transactions", __name__)
 
 
-@frontend_route(bp, "/<int:tx_id>")
+@frontend_route(bp, "/<int:tx_id>/")
 def route_transaction(tx_id):
     tx = starktx_transaction(tx_id)
     return render_template("transaction.html", transaction=tx), 200
