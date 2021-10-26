@@ -120,6 +120,14 @@
             justify-content: space-between;
             margin-bottom: 1rem;
         }
+
+        .error-msg {
+            color: #c00;
+            font-size: 12px;
+            margin-top: 5px;
+            position: absolute;
+        }
+
     </style>
 </head>
 
@@ -131,7 +139,10 @@
     <form action="/" method="GET" onsubmit="return onSubmit(this)">
         <div>
             <label for="tx">Tx Hash</label>
-            <input class="input" size="66" type="text" id="tx">
+            <input class="input" size="66" type="text" id="tx"
+                   oninput="handleValueChange()"
+                   onchange="handleValueChange()">
+            <div class="error-msg" id="error_hash"></div>
         </div>
         <div class="tx-submit">
             <input id="tx_submit" type="submit" value="Decode now">
@@ -142,11 +153,35 @@
 
 <script type="text/javascript">
     function onSubmit(e) {
-        window.onbeforeunload = function () {
-            document.getElementById("tx_submit").value = "Decoding...";
-        };
-        e.action = '/' + e.tx.value;
+        const tx = document.getElementById(`tx`).value;
+        if (!tx || checkTxHash(tx) === false) {
+            printError("error_hash", "Please, enter a valid transaction hash.")
+            return false;
+        } else {
+            window.onbeforeunload = function () {
+                document.getElementById("tx_submit").value = "Decoding...";
+            };
+            e.action = '/' + e.tx.value;
+        }
     }
+
+
+    function handleValueChange() {
+        hideError("error_hash")
+    }
+
+    function checkTxHash(tx) {
+        return (Number(tx) === parseInt(tx, 10))
+    }
+
+    function printError(elemId, hintMsg) {
+        document.getElementById(elemId).innerHTML = hintMsg;
+    }
+
+    function hideError(elemId) {
+        document.getElementById(elemId).innerHTML = "";
+    }
+
 </script>
 </body>
 </html>
