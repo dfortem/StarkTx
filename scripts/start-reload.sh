@@ -22,4 +22,4 @@ export GUNICORN_CONF=${GUNICORN_CONF:-$DEFAULT_GUNICORN_CONF}
 
 
 # Start Gunicorn
-exec gunicorn "--reload" -c "$GUNICORN_CONF" wsgi:app
+exec gunicorn "--reload" -c "$GUNICORN_CONF" "$APP_MODULE"
