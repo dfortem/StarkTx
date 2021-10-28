@@ -5,7 +5,7 @@ services:
     env_file:
       - .env
     build:
-      context: ./
+      context: ./stark_tx
       dockerfile: Dockerfile
       args:
         INSTALL_DEV: ${INSTALL_DEV-false}

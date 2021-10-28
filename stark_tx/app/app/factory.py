@@ -8,7 +8,7 @@ from .helpers import class_import, register_blueprints
 from .logger import setup_logging
 
 env = os.getenv("ENV", "development").capitalize()
-config_class = f"stark_tx.config.{env}Config"
+config_class = f"app.config.{env}Config"
 config: Config = class_import(config_class)
 
 

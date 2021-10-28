@@ -3,8 +3,8 @@ from typing import Callable, Dict, Optional, Union, Type
 
 from flask import Blueprint, Flask
 
-from .. import factory
-from ..engine.providers.semantics import load_semantics
+from app import factory
+from app.engine.providers.semantics import load_semantics
 
 
 def create_app(settings_override: Optional[Union[Dict, Type]] = None) -> Flask:

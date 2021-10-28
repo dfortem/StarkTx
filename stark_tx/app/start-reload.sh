@@ -1,9 +1,9 @@
 #! /usr/bin/env sh
 set -e
 
-if [ -f /app/wsgi.py ]; then
-    DEFAULT_MODULE_NAME=wsgi
-elif [ -f /wsgi.py ]; then
+if [ -f /app/app/wsgi.py ]; then
+    DEFAULT_MODULE_NAME=app.wsgi
+elif [ -f /app/wsgi.py ]; then
     DEFAULT_MODULE_NAME=wsgi
 fi
 
@@ -22,4 +22,4 @@ export GUNICORN_CONF=${GUNICORN_CONF:-$DEFAULT_GUNICORN_CONF}
 
 
 # Start Gunicorn
-exec gunicorn -c "$GUNICORN_CONF" "$APP_MODULE"
+exec gunicorn "--reload" -c "$GUNICORN_CONF" "$APP_MODULE"

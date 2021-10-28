@@ -1,4 +1,4 @@
-from stark_tx.engine.providers.semantics import get_semantics
+from app.engine.providers.semantics import get_semantics
 
 
 def decode_parameters(parameters, parameters_abi):

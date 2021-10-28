@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template
 
-from stark_tx.engine.decoders.transaction import decode_transaction
-from stark_tx.engine.providers.sequencer import get_transaction, get_block
-from stark_tx.frontend import frontend_route
-from stark_tx.frontend.output import print_transaction
+from app.engine.decoders.transaction import decode_transaction
+from app.engine.providers.sequencer import get_transaction, get_block
+from app.frontend import frontend_route
+from app.frontend.output import print_transaction
 
 bp = Blueprint("transactions", __name__)
 

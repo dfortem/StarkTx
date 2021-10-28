@@ -1,7 +1,7 @@
 from flask import Flask
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 
-from stark_tx import frontend
+from app import frontend
 
 app = Flask(__name__)
 

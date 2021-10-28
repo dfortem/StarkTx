@@ -1,8 +1,8 @@
 from datetime import datetime
 
 
-from stark_tx.engine.decoders.parameter import decode_parameters
-from stark_tx.engine.providers.semantics import get_semantics
+from app.engine.decoders.parameter import decode_parameters
+from app.engine.providers.semantics import get_semantics
 
 
 def decode_transaction(block: dict, transaction: dict) -> dict:

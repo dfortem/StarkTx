@@ -1,7 +1,7 @@
 import json
 
-from stark_tx.engine.providers.sequencer import get_abi
-from stark_tx.engine.decoders.abi import decode_abi
+from app.engine.providers.sequencer import get_abi
+from app.engine.decoders.abi import decode_abi
 
 
 semantics = {}

@@ -3,10 +3,12 @@ services:
   starkware:
     ports:
       - "5000:5000"
+    volumes:
+      - ./stark_tx/app:/app
     build:
-      context: ./
+      context: ./stark_tx
       dockerfile: Dockerfile
       args:
         INSTALL_DEV: ${INSTALL_DEV-false}
 
-    command: /app/scripts/start-reload.sh
+    command: /start-reload.sh
