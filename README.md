@@ -16,13 +16,28 @@
 Live version of StarkTx is available here [http://starktx.info/](http://starktx.info/), with source code released
 here [StarkWare](https://github.com/TokenFlowInsights/StarkWare)
 
+## Backend Requirements
+
+* [Docker](https://www.docker.com/).
+* [Docker Compose](https://docs.docker.com/compose/install/).
+* [Poetry](https://python-poetry.org/) for Python package and environment management.
+
+
+## Backend local development
+
+* Start the stack with Docker Compose:
+
+```bash
+docker-compose up -d --build
+```
+
 ## Backend local development, additional details
 
 ### General workflow
 
 By default, the dependencies are managed with [Poetry](https://python-poetry.org/), go there and install it.
 
-From `./` you can install all the dependencies with:
+From `./stark_tx/app/` you can install all the dependencies with:
 
 ```console
 $ poetry install
@@ -34,17 +49,6 @@ Then you can start a shell session with the new environment with:
 $ poetry shell
 ```
 
-Next, open your editor at `./`. That way, your editor will be able to find all the imports, etc. Make sure your editor
-uses the environment you just created with Poetry.
-
-### Docker
-To run an application via the docker run command (build and run):
-
-```console
-docker-compose up --build
-```
-
-in background:
-```console
-docker-compose up -d --build
-```
+Next, open your editor at ./stark_tx/app/ (instead of the project root: ./), so that you see an ./app/ directory with
+your code inside. That way, your editor will be able to find all the imports, etc. Make sure your editor uses the
+environment you just created with Poetry.
