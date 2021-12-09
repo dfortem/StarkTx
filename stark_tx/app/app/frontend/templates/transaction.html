@@ -6,12 +6,12 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro voyager_transaction_link(tx_id) %}
-    <a style="color: darkgreen" href="https://voyager.online/tx/{{ tx_id }}" target="_blank">{{- tx_id -}}</a>
+{% macro voyager_transaction_link(tx_hash) %}
+    <a style="color: darkgreen" href="https://voyager.online/tx/{{ tx_hash }}" target="_blank">{{- tx_hash -}}</a>
 {% endmacro %}
 
-{%- macro voyager_block_link(block_id) -%}
-    <a style="color: darkred" href="https://voyager.online/block/{{ block_id }}" target="_blank">{{- block_id -}}</a>
+{%- macro voyager_block_link(block_hash) -%}
+    <a style="color: darkred" href="https://voyager.online/block/{{ block_hash }}" target="_blank">{{- block_hash -}}</a>
 {%- endmacro -%}
 
 {% macro etherscan_address_link(address, label, badge="") %}
@@ -65,7 +65,7 @@
 
 <head>
     {% include './partials/headtags.html' %}
-    <title>StarkTx.info Analysis {{ transaction.transaction_id }}</title>
+    <title>StarkTx.info Analysis {{ transaction.transaction_hash }}</title>
 
 
     <link href="//cdn.jsdelivr.net/npm/jquery.fancytree@2.27/dist/skin-win8/ui.fancytree.min.css" rel="stylesheet">
@@ -81,13 +81,13 @@
         <h3>
             <a title="Home" href="/">
                 <i class="fas fa-home "></i>
-            </a> Analysis for StarkNet transaction: <span class="transaction-hash">{{ voyager_transaction_link(transaction.transaction_id) }}</span>
+            </a> Analysis for StarkNet transaction: <span class="transaction-hash">{{ voyager_transaction_link(transaction.transaction_hash) }}</span>
         </h3>
         <div class="container-info-logo">
             <div class="transaction-info">
                 <div>
-                    {% if transaction.block_id %}
-                        Block: <span style='color: darkred'>{{ voyager_block_link(transaction.block_id) -}}/{{ transaction.block_number }} </span>
+                    {% if transaction.block_hash %}
+                        Block: <span style='color: darkred'>{{ voyager_block_link(transaction.block_hash) -}}/{{ transaction.block_number }} </span>
                     {% else %}
                         Block: <span style='color: darkred'>Transaction failed</span>
                     {% endif %}

@@ -25,7 +25,11 @@ here [StarkWare](https://github.com/TokenFlowInsights/StarkWare)
 
 ## Backend local development
 
-* Start the stack with Docker Compose:
+* Start the stack with Docker Compose:  
+
+Make sure you have `.env` file in the root of the project.
+If not, create it with the content from `.env.sample` file.
+
 
 ```bash
 docker-compose up -d --build

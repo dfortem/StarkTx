@@ -9,8 +9,8 @@ def decode_transaction(block: dict, transaction: dict) -> dict:
         transaction["transaction"]["contract_address"], transaction["block_hash"]
     )
     decoded_transaction = dict()
-    decoded_transaction["block_id"] = (
-        transaction["block_id"] if "block_id" in transaction else None
+    decoded_transaction["block_hash"] = (
+        transaction["block_hash"] if "block_hash" in transaction else None
     )
     decoded_transaction["block_number"] = (
         transaction["block_number"] if "block_number" in transaction else None
@@ -21,7 +21,7 @@ def decode_transaction(block: dict, transaction: dict) -> dict:
         else None
     )
 
-    decoded_transaction["transaction_id"] = transaction["transaction"][
+    decoded_transaction["transaction_hash"] = transaction["transaction"][
         "transaction_hash"
     ]
     decoded_transaction["type"] = transaction["transaction"]["type"]
