@@ -5,7 +5,9 @@ def decode_parameters(parameters, parameters_abi):
     decoded_parameters = []
     parameters_index = 0
     abi_index = 0
-    while parameters_index < len(parameters):
+
+    # TODO: check me, dunno why i took len - 1, without it it fails
+    while parameters_index < len(parameters) - 1:
         raw_input = parameters[parameters_index]
         parameter_type = (
             "address"

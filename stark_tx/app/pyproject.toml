@@ -7,15 +7,15 @@ authors = ["Tomasz Mierzwa <tomek@tfi.team>, Karol Chojnowski <karol@tfi.team>"]
 [tool.poetry.dependencies]
 python = "^3.9"
 Flask = "^2.0.2"
-web3 = "^5.24.0"
+web3 = "^5.25.0"
 cairo-lang = "^0.4.2"
-python-dotenv = "^0.19.1"
-gunicorn = "^20.0.4"
-uvicorn = "^0.15.0"
+python-dotenv = "^0.19.2"
+gunicorn = "^20.1.0"
+pydantic = "^1.8.2"
 
 
 [tool.poetry.dev-dependencies]
-pre-commit = "*"
+pre-commit = "^2.16.0"
 autoflake = "^1.3.1"
 flake8 = "^4.0.1"
 black = "==19.3b0"

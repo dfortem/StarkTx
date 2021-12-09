@@ -1,14 +1,13 @@
 from datetime import datetime
 
-
 from app.engine.decoders.parameter import decode_parameters
 from app.engine.providers.semantics import get_semantics
 
 
 def decode_transaction(block: dict, transaction: dict) -> dict:
-
-    semantics = get_semantics(transaction["transaction"]["contract_address"])
-
+    semantics = get_semantics(
+        transaction["transaction"]["contract_address"], transaction["block_hash"]
+    )
     decoded_transaction = dict()
     decoded_transaction["block_id"] = (
         transaction["block_id"] if "block_id" in transaction else None
@@ -21,7 +20,10 @@ def decode_transaction(block: dict, transaction: dict) -> dict:
         if block and "timestamp" in block
         else None
     )
-    decoded_transaction["transaction_id"] = transaction["transaction_id"]
+
+    decoded_transaction["transaction_id"] = transaction["transaction"][
+        "transaction_hash"
+    ]
     decoded_transaction["type"] = transaction["transaction"]["type"]
     decoded_transaction["transaction_index"] = (
         transaction["transaction_index"] if "transaction_index" in transaction else None
@@ -34,8 +36,14 @@ def decode_transaction(block: dict, transaction: dict) -> dict:
         if "transaction_failure_reason" in transaction
         else None
     )
+
     receipt = (
-        block["transaction_receipts"].get(str(transaction["transaction_id"]))
+        [
+            receipt
+            for receipt in block["transaction_receipts"]
+            if receipt["transaction_hash"]
+            == transaction["transaction"]["transaction_hash"]
+        ][0]
         if block
         else None
     )
