@@ -1,7 +1,7 @@
 version: "3.6"
 services:
   starkware:
-    image: '${DOCKER_IMAGE_STARKWARE?Variable not set}:${TAG-latest}'
+    image: '${DOCKER_IMAGE_STARKTX?Variable not set}:${TAG-latest}'
     env_file:
       - .env
     build:

@@ -8,11 +8,11 @@ authors = ["Tomasz Mierzwa <tomek@tfi.team>, Karol Chojnowski <karol@tfi.team>"]
 python = "^3.9"
 Flask = "^2.0.2"
 web3 = "^5.25.0"
-cairo-lang = "^0.4.2"
+cairo-lang = "^0.6.1"
 python-dotenv = "^0.19.2"
 gunicorn = "^20.1.0"
 pydantic = "^1.8.2"
-
+meinheld = "^1.0.2"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.16.0"

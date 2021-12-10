@@ -4,14 +4,14 @@ repos:
     hooks:
       - id: black
         language_version: python3.9
-        name: StarkWare:black
-        alias: stark_ware-black
+        name: StarkTx:black
+        alias: stark_tx-black
 
   - repo: https://gitlab.com/pycqa/flake8
     rev: 4.0.1
     hooks:
       - id: flake8
         language_version: python3.9
-        name: StarkWare:flake8
-        alias: stark_ware-flake8
+        name: StarTx:flake8
+        alias: stark_tx-flake8
         args: [ --config=stark_tx/app/.flake8 ]

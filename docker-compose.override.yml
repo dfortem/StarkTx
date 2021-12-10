@@ -11,4 +11,5 @@ services:
       args:
         INSTALL_DEV: ${INSTALL_DEV-false}
 
-    command: /start-reload.sh
+    # start with reload: /start-reload.sh
+    command: /start.sh

@@ -5,8 +5,8 @@ from app.engine.providers.sequencer import get_block, get_transaction
 from app.frontend.output import print_transaction
 
 
-def starktx_transaction(transaction_id: int) -> dict:
-    raw_transaction = get_transaction(transaction_id)
+def starktx_transaction(transaction_hash: str) -> dict:
+    raw_transaction = get_transaction(transaction_hash)
     raw_block = (
         get_block(raw_transaction["block_id"])
         if "block_id" in raw_transaction

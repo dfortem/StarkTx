@@ -5,10 +5,10 @@ log = logging.getLogger(__name__)
 
 def print_transaction(tx):
     log.info(
-        "Block: %d/%d Time: %s", tx["block_hash"], tx["block_number"], tx["timestamp"]
+        "Block: %s/%s Time: %s", tx["block_hash"], tx["block_number"], tx["timestamp"]
     )
     log.info(
-        "Tx: %d Index: %d Status: %s",
+        "Tx: %s Index: %s Status: %s",
         tx["transaction_hash"],
         tx["transaction_index"],
         tx["status"],

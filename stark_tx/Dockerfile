@@ -11,6 +11,9 @@ RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/inst
 # Copy poetry.lock* in case it doesn't exist in the repo
 COPY ./app/pyproject.toml ./app/poetry.lock* /app/
 
+COPY ./app/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 COPY ./app/start.sh  /start.sh
 RUN chmod +x /start.sh
 
@@ -26,3 +29,7 @@ RUN bash -c "if [ $INSTALL_DEV == 'true' ] ; then poetry install --no-root ; els
 
 COPY ./app /app
 ENV PYTHONPATH=/app
+
+EXPOSE 80
+
+ENTRYPOINT ["/entrypoint.sh"]
