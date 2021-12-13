@@ -6,12 +6,12 @@ from app.frontend.output import print_transaction
 
 
 def starktx_transaction(transaction_hash: str) -> dict:
-    raw_transaction = get_transaction(transaction_hash).json()
+    raw_transaction = get_transaction(transaction_hash)
     raw_block = (
         get_block(raw_transaction["block_id"])
         if "block_id" in raw_transaction
         else None
-    ).json()
+    )
     decoded_transaction = decode_transaction(raw_block, raw_transaction)
     print_transaction(decoded_transaction)
 
@@ -19,7 +19,7 @@ def starktx_transaction(transaction_hash: str) -> dict:
 
 
 def starktx_block(block_id: int) -> []:
-    raw_block = get_block(block_id).json()
+    raw_block = get_block(block_id)
     decoded_transactions = []
     for index, (transaction_id, block_transaction) in enumerate(
         raw_block["transactions"].items()

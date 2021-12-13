@@ -26,7 +26,7 @@ def get_semantics(contract: str, block_hash: Optional[str] = None) -> dict:
     if contract in semantics:
         contract_semantics = semantics[contract]
     else:
-        raw_abi = get_abi(contract, block_hash=block_hash).json()
+        raw_abi = get_abi(contract, block_hash=block_hash)
         decoded_abi = decode_abi(raw_abi["abi"] if "abi" in raw_abi else {})
         contract_semantics = dict(
             contract=contract, name=contract[:10], abi=decoded_abi

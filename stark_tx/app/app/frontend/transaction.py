@@ -15,12 +15,12 @@ def route_transaction(tx_hash):
 
 
 def starktx_transaction(transaction_hash: str) -> dict:
-    raw_transaction = get_transaction(transaction_hash).json()
+    raw_transaction = get_transaction(transaction_hash)
     raw_block = (
         get_block(raw_transaction["block_hash"])
         if "block_hash" in raw_transaction
         else None
-    ).json()
+    )
     decoded_transaction = decode_transaction(raw_block, raw_transaction)
     print_transaction(decoded_transaction)
 
