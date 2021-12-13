@@ -16,9 +16,6 @@ class Config:
         "LOGGING_CONFIG", os.path.join(BASE_DIR, "../../../tmp")
     )
 
-    API_KEY = os.getenv("API_KEY", "")
-    MAX_CONTENT_LENGTH = 10 * 1024 * 1024
-
 
 class ProductionConfig(Config):
     """Production Config."""

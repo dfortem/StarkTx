@@ -171,7 +171,8 @@
     }
 
     function checkTxHash(tx) {
-        return true;
+        const pattern = new RegExp(/^(0x)?([A-Fa-f0-9]{63})$/)
+        return pattern.test(tx);
     }
 
     function printError(elemId, hintMsg) {
