@@ -1,4 +1,4 @@
-from collections import Callable
+from typing import Callable
 from functools import wraps
 
 from requests import HTTPError

@@ -33,6 +33,6 @@ def get_abi(
 ) -> TStarkNetAPIResponse:
     url = (
         f"{settings.SEQUENCER}/get_code?"
-        f'contractAddress={contract_id}&blockHash={block_hash if block_hash else "null"}'
+        f'contractAddress={contract_id}{"&blockHash=" + block_hash if block_hash else ""}'
     )
     return requests.get(url)
