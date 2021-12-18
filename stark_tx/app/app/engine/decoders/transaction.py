@@ -50,6 +50,9 @@ def decode_transaction(block: dict, transaction: dict) -> dict:
     decoded_transaction["l2_to_l1"] = receipt["l2_to_l1_messages"] if receipt else []
 
     if transaction["transaction"]["type"] == "INVOKE_FUNCTION":
+
+        # ToDo: handle unknown selectors (e.g. 0x670029ca8d4e78f034c96be0522249a5a256e91a454c714de92d8de647de354)
+
         function_abi = semantics["abi"]["functions"][
             transaction["transaction"]["entry_point_selector"]
         ]
