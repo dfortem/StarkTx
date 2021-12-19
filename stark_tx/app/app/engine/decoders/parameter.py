@@ -6,8 +6,7 @@ def decode_parameters(parameters, parameters_abi):
     parameters_index = 0
     abi_index = 0
 
-    # TODO: check me, dunno why i took len - 1, without it it fails
-    while parameters_index < len(parameters) - 1:
+    while parameters_index < len(parameters):
 
         parameter_type = (
             "address"
