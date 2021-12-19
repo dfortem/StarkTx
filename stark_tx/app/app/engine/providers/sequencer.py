@@ -13,7 +13,7 @@ from app.engine.types import TStarkNetAPIResponse
 @lru_cache()
 @starknet_api_handler
 def get_block(block_id: int) -> TStarkNetAPIResponse:
-    url = f"{settings.SEQUENCER}/get_block?blockHash={block_id}"
+    url = f"{settings.SEQUENCER_ETH_MAINNET}/get_block?blockHash={block_id}"
     return requests.get(url)
 
 
@@ -21,7 +21,7 @@ def get_block(block_id: int) -> TStarkNetAPIResponse:
 @lru_cache()
 @starknet_api_handler
 def get_transaction(transaction_hash: str) -> TStarkNetAPIResponse:
-    url = f"{settings.SEQUENCER}/get_transaction?transactionHash={transaction_hash}"
+    url = f"{settings.SEQUENCER_ETH_MAINNET}/get_transaction?transactionHash={transaction_hash}"
     return requests.get(url)
 
 
@@ -32,7 +32,7 @@ def get_abi(
     contract_id: str, *, block_hash: Optional[str] = None
 ) -> TStarkNetAPIResponse:
     url = (
-        f"{settings.SEQUENCER}/get_code?"
+        f"{settings.SEQUENCER_ETH_MAINNET}/get_code?"
         f'contractAddress={contract_id}{"&blockHash=" + block_hash if block_hash else ""}'
     )
     return requests.get(url)

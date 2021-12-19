@@ -9,7 +9,8 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
 
     # StarkWare
-    SEQUENCER: AnyHttpUrl
+    SEQUENCER_ETH_MAINNET: AnyHttpUrl = "https://alpha-mainnet.starknet.io/feeder_gateway"
+    SEQUENCER_GOERLI_TESTNET: AnyHttpUrl = "https://alpha4.starknet.io/feeder_gateway"
 
     PROJECT_NAME: str
 

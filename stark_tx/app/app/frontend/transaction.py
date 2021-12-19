@@ -8,8 +8,8 @@ from app.frontend.output import print_transaction
 bp = Blueprint("transactions", __name__)
 
 
-@frontend_route(bp, "/<string:tx_hash>/")
-def route_transaction(tx_hash):
+@frontend_route(bp, "/<string:chain_id>/<string:tx_hash>/")
+def route_transaction(chain_id: str, tx_hash: str):
     tx = starktx_transaction(tx_hash)
     return render_template("transaction.html", transaction=tx), 200
 
