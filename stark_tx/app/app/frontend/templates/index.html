@@ -124,6 +124,13 @@
     </div>
     <form action="/" method="GET" onsubmit="return onSubmit(this)">
         <div>
+            <label for="net">Network</label>
+            <select class="input select" id="net">
+                <option value="mainnet">ETH mainnet</option>
+                <option value="goerli">Goerli testnet</option>
+            </select>
+        </div>
+        <div>
             <label for="tx">Tx Hash</label>
             <input class="input" size="66" type="text" id="tx"
                    oninput="handleValueChange()"
