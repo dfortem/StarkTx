@@ -6,6 +6,7 @@ from flask import Blueprint, render_template
 from requests import HTTPError
 from werkzeug.exceptions import HTTPException
 
+from app.base_exceptions import NotSupportedChainError
 from app.frontend.deps import extract_tx_hash_from_req
 
 log = logging.getLogger(__name__)
@@ -50,13 +51,11 @@ def handle_all_http_exceptions(error: HTTPException) -> HTTPException:
     return error
 
 
-@exceptions_bp.app_errorhandler(Exception)
-@render_error_page(status=500)
-def handle_all_exceptions(error: Exception) -> str:
-    """All Exceptions handler."""
-    log.exception(str(error))
-
-    return "Unexpected error"
+@exceptions_bp.app_errorhandler(NotSupportedChainError)
+@render_error_page(status=501)
+def handle_not_supported_chain_error(error: NotSupportedChainError) -> str:
+    """Not supported chain error handler."""
+    return str(error)
 
 
 @exceptions_bp.app_errorhandler(HTTPError)
@@ -64,3 +63,12 @@ def handle_all_exceptions(error: Exception) -> str:
 def handle_starknet_api_errors(error: HTTPError) -> HTTPError:
     """StarkNet API errors handler."""
     return error
+
+
+@exceptions_bp.app_errorhandler(Exception)
+@render_error_page(status=500)
+def handle_all_exceptions(error: Exception) -> str:
+    """All Exceptions handler."""
+    log.exception(str(error))
+
+    return "Unexpected error"

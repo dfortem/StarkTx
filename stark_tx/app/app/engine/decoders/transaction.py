@@ -4,9 +4,11 @@ from app.engine.decoders.parameter import decode_parameters
 from app.engine.providers.semantics import get_semantics
 
 
-def decode_transaction(block: dict, transaction: dict) -> dict:
+def decode_transaction(chain_id: str, block: dict, transaction: dict) -> dict:
     semantics = get_semantics(
-        transaction["transaction"]["contract_address"], transaction["block_hash"]
+        chain_id,
+        transaction["transaction"]["contract_address"],
+        transaction["block_hash"],
     )
     decoded_transaction = dict()
     decoded_transaction["block_hash"] = (

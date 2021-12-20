@@ -10,18 +10,18 @@ bp = Blueprint("transactions", __name__)
 
 @frontend_route(bp, "/<string:chain_id>/<string:tx_hash>/")
 def route_transaction(chain_id: str, tx_hash: str):
-    tx = starktx_transaction(tx_hash)
+    tx = starktx_transaction(chain_id, tx_hash)
     return render_template("transaction.html", transaction=tx), 200
 
 
-def starktx_transaction(transaction_hash: str) -> dict:
-    raw_transaction = get_transaction(transaction_hash)
+def starktx_transaction(chain_id: str, transaction_hash: str) -> dict:
+    raw_transaction = get_transaction(chain_id, transaction_hash)
     raw_block = (
-        get_block(raw_transaction["block_hash"])
+        get_block(chain_id, raw_transaction["block_hash"])
         if "block_hash" in raw_transaction
         else None
     )
-    decoded_transaction = decode_transaction(raw_block, raw_transaction)
+    decoded_transaction = decode_transaction(chain_id, raw_block, raw_transaction)
     print_transaction(decoded_transaction)
 
     return decoded_transaction

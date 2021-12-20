@@ -1,6 +1,9 @@
 import secrets
+from enum import Enum, EnumMeta
 
 from pydantic import AnyHttpUrl, BaseSettings
+
+from app.base_exceptions import NotSupportedChainError
 
 
 class Settings(BaseSettings):
@@ -16,6 +19,19 @@ class Settings(BaseSettings):
 
     class Config:
         case_sensitive = True
+        use_enum_values = True
 
 
 settings = Settings()
+
+
+class EnumValidator(EnumMeta):
+    def __getitem__(cls, name):
+        if name.lower() == "mainnet":
+            raise NotSupportedChainError(name)
+        return super().__getitem__(name)
+
+
+class SequencerURL(str, Enum, metaclass=EnumValidator):
+    mainnet = settings.SEQUENCER_ETH_MAINNET
+    goerli = settings.SEQUENCER_GOERLI_TESTNET

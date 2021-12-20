@@ -154,7 +154,7 @@
             window.onbeforeunload = function () {
                 document.getElementById("tx_submit").value = "Decoding...";
             };
-            e.action = '/' + e.tx.value;
+            e.action = '/' + e.net.options[e.net.selectedIndex].value + '/' + e.tx.value;
         }
     }
 
