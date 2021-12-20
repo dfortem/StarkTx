@@ -52,10 +52,11 @@ def handle_all_http_exceptions(error: HTTPException) -> HTTPException:
 
 @exceptions_bp.app_errorhandler(Exception)
 @render_error_page(status=500)
-def handle_all_exceptions(error: Exception) -> Exception:
+def handle_all_exceptions(error: Exception) -> str:
     """All Exceptions handler."""
-    log.exception(error)
-    return error
+    log.exception(str(error))
+
+    return "Unexpected error"
 
 
 @exceptions_bp.app_errorhandler(HTTPError)
