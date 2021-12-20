@@ -120,7 +120,7 @@
 <body>
 <div class="container">
     <div class="container-title">
-        <span class="main-title">StarkNet Transaction Decoder</span>
+        <span class="main-title">StarkTx Transaction Decoder</span>
     </div>
     <form action="/" method="GET" onsubmit="return onSubmit(this)">
         <div>
@@ -154,7 +154,7 @@
             window.onbeforeunload = function () {
                 document.getElementById("tx_submit").value = "Decoding...";
             };
-            e.action = '/' + e.tx.value;
+            e.action = '/' + e.net.options[e.net.selectedIndex].value + '/' + e.tx.value;
         }
     }
 

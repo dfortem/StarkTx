@@ -12,4 +12,4 @@ services:
         INSTALL_DEV: ${INSTALL_DEV-false}
 
     # start with reload: /start-reload.sh
-    command: /start-reload.sh
+    command: /start.sh
