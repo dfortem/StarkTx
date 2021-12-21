@@ -16,7 +16,8 @@ def decode_parameters(parameters, parameters_abi):
 
         if parameter_type == 'struct':
             name = parameters_abi[abi_index]["name"]
-            value = decode_struct(parameters[parameters_index:], parameters_abi[abi_index]['struct_members'])
+            value = '{' + create_parameters_string(decode_struct(parameters[parameters_index:],
+                                                   parameters_abi[abi_index]['struct_members'])) + '}'
             parameters_index += len(parameters_abi[abi_index]['struct_members'])
             abi_index += 1
         else:
@@ -45,12 +46,12 @@ def decode_parameters(parameters, parameters_abi):
 
     # simple heuristic to detect internal calls
     if (
-        len(decoded_parameters) == 3
+        len(decoded_parameters) >= 3
         and decoded_parameters[0]["name"] in ("contract_address", "to")
         and decoded_parameters[1]["name"] in ("function_selector", "selector")
         and decoded_parameters[2]["name"] == "calldata"
     ):
-        # these parameters sometimes are a hex string but sometimes as felt
+        # these parameters sometimes are a hex string but sometimes are felt
         contract = hex(decoded_parameters[0]["value"]) \
                    if type(decoded_parameters[0]["value"]) == int \
                    else decoded_parameters[0]["value"]
@@ -58,10 +59,9 @@ def decode_parameters(parameters, parameters_abi):
                    if type(decoded_parameters[1]["value"]) == int \
                    else decoded_parameters[1]["value"]
 
-        # how to process calldata as a list in a general?
-        calldata = decoded_parameters[2]["value"][0] \
+        calldata = decoded_parameters[2]["value"] \
                    if type(decoded_parameters[2]["value"]) == list \
-                   else decoded_parameters[2]["value"]
+                   else [decoded_parameters[2]["value"]]
 
         semantics = get_semantics(contract)
         if semantics:
@@ -72,12 +72,13 @@ def decode_parameters(parameters, parameters_abi):
                 function_name = function_abi["name"]
                 function_inputs = decode_parameters(calldata, function_abi["inputs"])
                 input_string = create_parameters_string(function_inputs)
+                additional_parameters = decoded_parameters[3:]
                 decoded_parameters = [
                     dict(
                         name="call",
                         value=f"{semantics['name']}.{function_name}({input_string})",
                     )
-                ]
+                ] + additional_parameters
 
     return decoded_parameters
 
