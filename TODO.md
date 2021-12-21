@@ -8,4 +8,4 @@
 
 ### Hmmm
 
-- [] Maybe replace flask with fastapi?
+- [ ] Maybe replace flask with fastapi?
