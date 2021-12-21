@@ -34,6 +34,7 @@ def frontend_route(bp: Blueprint, *args, **kwargs):
         def wrapper(*args, **kwargs):
             return f(*args, **kwargs)
 
+        f.__name__ = str(id(f)) + f.__name__
         return f
 
     return decorator

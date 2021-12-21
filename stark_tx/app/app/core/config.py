@@ -1,7 +1,9 @@
 import secrets
-from enum import Enum
+from enum import Enum, EnumMeta
 
 from pydantic import AnyHttpUrl, BaseSettings
+
+from app.base_exceptions import NotSupportedChainError
 
 
 class Settings(BaseSettings):
@@ -13,6 +15,8 @@ class Settings(BaseSettings):
     SEQUENCER_ETH_MAINNET: AnyHttpUrl = "https://alpha-mainnet.starknet.io/feeder_gateway"
     SEQUENCER_GOERLI_TESTNET: AnyHttpUrl = "https://alpha4.starknet.io/feeder_gateway"
 
+    DEFAULT_SEQUENCER_URL: AnyHttpUrl = SEQUENCER_ETH_MAINNET
+
     PROJECT_NAME: str
 
     class Config:
@@ -23,6 +27,18 @@ class Settings(BaseSettings):
 settings = Settings()
 
 
-class SequencerURL(str, Enum):
+class EnumValidator(EnumMeta):
+    def __getitem__(cls, name):
+        try:
+            if not name:
+                return super().__getitem__("DEFAULT")
+            return super().__getitem__(name)
+        except KeyError:
+            raise NotSupportedChainError(name)
+
+
+class SequencerURL(str, Enum, metaclass=EnumValidator):
+    DEFAULT = settings.DEFAULT_SEQUENCER_URL
+
     mainnet = settings.SEQUENCER_ETH_MAINNET
     goerli = settings.SEQUENCER_GOERLI_TESTNET

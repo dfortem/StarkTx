@@ -1,3 +1,5 @@
+from typing import Optional
+
 from flask import Blueprint, render_template
 
 from app.engine.decoders.transaction import decode_transaction
@@ -8,8 +10,11 @@ from app.frontend.output import print_transaction
 bp = Blueprint("transactions", __name__)
 
 
+@frontend_route(bp, "/<string:tx_hash>/")
 @frontend_route(bp, "/<string:chain_id>/<string:tx_hash>/")
-def route_transaction(chain_id: str, tx_hash: str):
+def route_transaction(
+    tx_hash: str, chain_id: Optional[str] = None
+) -> tuple["render_template", int]:
     tx = starktx_transaction(chain_id, tx_hash)
     return render_template("transaction.html", transaction=tx), 200
 
