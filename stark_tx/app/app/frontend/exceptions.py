@@ -6,7 +6,7 @@ from flask import Blueprint, render_template
 from requests import HTTPError
 from werkzeug.exceptions import HTTPException
 
-from app.base_exceptions import NotSupportedChainError
+from app.base_exceptions import NotSupportedChainError, TransactionStatusError
 from app.frontend.deps import extract_tx_hash_from_req
 
 log = logging.getLogger(__name__)
@@ -63,6 +63,13 @@ def handle_not_supported_chain_error(error: NotSupportedChainError) -> str:
 def handle_starknet_api_errors(error: HTTPError) -> HTTPError:
     """StarkNet API errors handler."""
     return error
+
+
+@exceptions_bp.app_errorhandler(TransactionStatusError)
+@render_error_page(status=404)
+def handle_transaction_status_error(error: TransactionStatusError) -> str:
+    """Transaction status error handler."""
+    return str(error)
 
 
 @exceptions_bp.app_errorhandler(Exception)

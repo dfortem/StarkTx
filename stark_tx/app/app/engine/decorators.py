@@ -1,11 +1,14 @@
-from typing import Callable
 from functools import wraps
+from typing import Callable
 
 from requests import HTTPError
 
+from app.base_exceptions import TransactionStatusError
+from app.engine.providers.status import SequencerStatus
 from app.engine.types import TStarkNetAPIHandler, TStarkNetAPIResponse
 
 
+# TODO: definitely handle theses trash requests exceptions
 def starknet_api_handler(
     func: Callable[..., TStarkNetAPIHandler]
 ) -> Callable[..., TStarkNetAPIHandler]:
@@ -16,7 +19,14 @@ def starknet_api_handler(
         try:
             response = func(*args, **kwargs)
             response.raise_for_status()
-            return response.json()
+
+            json = response.json()
+
+            if json.get("status") and json["status"] in SequencerStatus:
+                if SequencerStatus[json["status"]].value[0] is False:
+                    raise TransactionStatusError(json["status"])
+
+            return json
         except HTTPError as e:
             raise HTTPError(response=e.response)
 
