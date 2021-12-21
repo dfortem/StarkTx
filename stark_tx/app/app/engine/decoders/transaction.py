@@ -60,10 +60,12 @@ def decode_transaction(chain_id: str, block: dict, transaction: dict) -> dict:
         ]
         decoded_transaction["function"] = function_abi["name"]
         decoded_transaction["inputs"] = decode_parameters(
-            transaction["transaction"]["calldata"], function_abi["inputs"]
+            chain_id, transaction["transaction"]["calldata"], function_abi["inputs"]
         )
         decoded_transaction["outputs"] = decode_parameters(
-            transaction["transaction"].get("outputs", []), function_abi["outputs"]
+            chain_id,
+            transaction["transaction"].get("outputs", []),
+            function_abi["outputs"],
         )
 
     return decoded_transaction

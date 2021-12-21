@@ -1,7 +1,7 @@
 from app.engine.providers.semantics import get_semantics
 
 
-def decode_parameters(parameters, parameters_abi):
+def decode_parameters(chain_id: str, parameters, parameters_abi):
     decoded_parameters = []
     parameters_index = 0
     abi_index = 0
@@ -80,7 +80,7 @@ def decode_parameters(parameters, parameters_abi):
             else [decoded_parameters[2]["value"]]
         )
 
-        semantics = get_semantics(contract)
+        semantics = get_semantics(chain_id, contract)
         if semantics:
             function_abi = (
                 semantics["abi"]["functions"][selector]
@@ -89,7 +89,9 @@ def decode_parameters(parameters, parameters_abi):
             )
             if function_abi:
                 function_name = function_abi["name"]
-                function_inputs = decode_parameters(calldata, function_abi["inputs"])
+                function_inputs = decode_parameters(
+                    chain_id, calldata, function_abi["inputs"]
+                )
                 input_string = create_parameters_string(function_inputs)
                 additional_parameters = decoded_parameters[3:]
                 decoded_parameters = [
@@ -105,7 +107,7 @@ def decode_parameters(parameters, parameters_abi):
 def create_parameters_string(parameters):
     parameters_string = ", ".join(
         [
-            f"{_input['name']}={_input['value'] if type(_input['value']) != list else '['+create_parameters_string(_input['value'])+']'}"
+            f"{_input['name']}={_input['value'] if type(_input['value']) != list else '[' + create_parameters_string(_input['value']) + ']'}"
             for _input in parameters
         ]
     )
