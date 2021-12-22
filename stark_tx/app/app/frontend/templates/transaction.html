@@ -1,17 +1,23 @@
 {% macro voyager_contract_link(address, label) %}
     {%- if address -%}
-        <a href="https://voyager.online/contract/{{ address }}" target="_blank">{{- label -}}</a>
+        <a href="https://
+                {%- if transaction.chain_id != 'mainnet' -%}{{ transaction.chain_id }}.{% endif %}voyager.online/contract/{{ address }}"
+           target="_blank">{{- label -}}</a>
     {%- else -%}
         {{- label -}}
     {%- endif -%}
 {% endmacro %}
 
 {% macro voyager_transaction_link(tx_hash) %}
-    <a style="color: darkgreen" href="https://voyager.online/tx/{{ tx_hash }}" target="_blank">{{- tx_hash -}}</a>
+    <a style="color: darkgreen" href="https://
+            {%- if transaction.chain_id != 'mainnet' -%}{{ transaction.chain_id }}.{% endif %}voyager.online/tx/{{ tx_hash }}"
+       target="_blank">{{- tx_hash -}}</a>
 {% endmacro %}
 
 {%- macro voyager_block_link(block_hash) -%}
-    <a style="color: darkred" href="https://voyager.online/block/{{ block_hash }}" target="_blank">{{- block_hash -}}</a>
+    <a style="color: darkred" href="https://
+            {%- if transaction.chain_id != 'mainnet' -%}{{ transaction.chain_id }}.{% endif %}voyager.online/block/{{ block_hash }}"
+       target="_blank">{{- block_hash -}}</a>
 {%- endmacro -%}
 
 {% macro etherscan_address_link(address, label, badge="") %}
@@ -81,7 +87,7 @@
         <h3>
             <a title="Home" href="/">
                 <i class="fas fa-home "></i>
-            </a> Analysis for StarkNet transaction: <span class="transaction-hash">{{ voyager_transaction_link(transaction.transaction_hash) }}</span>
+            </a> Analysis for StarkNet transaction: <span class="transaction-hash">{{ voyager_transaction_link(transaction.transaction_hash) }}/ {{ transaction.chain_id }}</span>
         </h3>
         <div class="container-info-logo">
             <div class="transaction-info">

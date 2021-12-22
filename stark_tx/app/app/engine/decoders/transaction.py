@@ -11,6 +11,7 @@ def decode_transaction(chain_id: str, block: dict, transaction: dict) -> dict:
         transaction["block_hash"],
     )
     decoded_transaction = dict()
+    decoded_transaction["chain_id"] = chain_id
     decoded_transaction["block_hash"] = (
         transaction["block_hash"] if "block_hash" in transaction else None
     )

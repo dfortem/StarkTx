@@ -4,7 +4,7 @@
 
 - [ ] Refactor `chain_id` parameter
 - [ ] Add wrapper for `requests` exceptions
-- [ ] Add `voyager` links
+- [x] Add `voyager` links
 
 ### Hmmm
 
