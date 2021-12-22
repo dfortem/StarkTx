@@ -93,7 +93,7 @@
             <div class="transaction-info">
                 <div>
                     {% if transaction.block_hash %}
-                        Block: <span style='color: darkred'>{{ voyager_block_link(transaction.block_hash) -}}/{{ transaction.block_number }} </span>
+                        Block: <span style='color: darkred'>{{ voyager_block_link(transaction.block_hash) -}}{% if block_number %}}/{{ transaction.block_number }}{% endif %} </span>
                     {% else %}
                         Block: <span style='color: darkred'>Transaction failed</span>
                     {% endif %}

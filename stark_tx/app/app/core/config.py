@@ -12,10 +12,10 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
 
     # StarkWare
-    SEQUENCER_ETH_MAINNET: AnyHttpUrl = "https://alpha-mainnet.starknet.io/feeder_gateway"
+    SEQUENCER_MAINNET: AnyHttpUrl = "https://alpha-mainnet.starknet.io/feeder_gateway"
     SEQUENCER_GOERLI_TESTNET: AnyHttpUrl = "https://alpha4.starknet.io/feeder_gateway"
 
-    DEFAULT_SEQUENCER_URL: AnyHttpUrl = SEQUENCER_ETH_MAINNET
+    DEFAULT_SEQUENCER_URL: AnyHttpUrl = SEQUENCER_MAINNET
 
     PROJECT_NAME: str
 
@@ -40,5 +40,5 @@ class EnumValidator(EnumMeta):
 class SequencerURL(str, Enum, metaclass=EnumValidator):
     DEFAULT = settings.DEFAULT_SEQUENCER_URL
 
-    mainnet = settings.SEQUENCER_ETH_MAINNET
+    mainnet = settings.SEQUENCER_MAINNET
     goerli = settings.SEQUENCER_GOERLI_TESTNET

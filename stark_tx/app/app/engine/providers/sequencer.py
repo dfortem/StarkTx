@@ -39,7 +39,7 @@ def get_abi(
 ) -> TStarkNetAPIResponse:
     url = (
         f"{SequencerURL[chain_id]}/get_code?"
-        f'contractAddress={contract_id}{"&blockHash=" + block_hash if block_hash else ""}'
+        f'contractAddress={contract_id}{"&blockHash=" + block_hash if block_hash and block_hash != "pending" else ""}'
     )
     logger.info("Get_abi: url: %s", url)
 

@@ -47,7 +47,7 @@ def decode_transaction(chain_id: str, block: dict, transaction: dict) -> dict:
             if receipt["transaction_hash"]
             == transaction["transaction"]["transaction_hash"]
         ][0]
-        if block
+        if block and block != 'pending'
         else None
     )
     decoded_transaction["l2_to_l1"] = receipt["l2_to_l1_messages"] if receipt else []
@@ -56,17 +56,24 @@ def decode_transaction(chain_id: str, block: dict, transaction: dict) -> dict:
 
         # ToDo: handle unknown selectors (e.g. 0x670029ca8d4e78f034c96be0522249a5a256e91a454c714de92d8de647de354)
 
-        function_abi = semantics["abi"]["functions"][
-            transaction["transaction"]["entry_point_selector"]
-        ]
-        decoded_transaction["function"] = function_abi["name"]
-        decoded_transaction["inputs"] = decode_parameters(
-            chain_id, transaction["transaction"]["calldata"], function_abi["inputs"]
-        )
-        decoded_transaction["outputs"] = decode_parameters(
-            chain_id,
-            transaction["transaction"].get("outputs", []),
-            function_abi["outputs"],
-        )
+        if transaction["transaction"]["entry_point_selector"] in semantics["abi"]["functions"]:
+            function_abi = semantics["abi"]["functions"][
+                transaction["transaction"]["entry_point_selector"]
+            ]
+            decoded_transaction["function"] = function_abi["name"]
+            decoded_transaction["inputs"] = decode_parameters(
+                chain_id, transaction["transaction"]["calldata"], function_abi["inputs"]
+            )
+            decoded_transaction["outputs"] = decode_parameters(
+                chain_id,
+                transaction["transaction"].get("outputs", []),
+                function_abi["outputs"],
+            )
+        else:
+            decoded_transaction["function"] = transaction["transaction"]["entry_point_selector"]
+            decoded_transaction["inputs"] = \
+                [dict(name=f'input_{i}', value=value) for i, value in enumerate(transaction["transaction"]["calldata"])]
+            decoded_transaction["outputs"] = \
+                [dict(name=f'input_{i}', value=value) for i, value in enumerate(transaction["transaction"].get("outputs", []))]
 
     return decoded_transaction
