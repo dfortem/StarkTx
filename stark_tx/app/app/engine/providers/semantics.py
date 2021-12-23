@@ -33,6 +33,7 @@ def get_semantics(
         contract_semantics = dict(
             contract=contract, name=contract[:10], abi=decoded_abi
         )
-        semantics[contract] = contract_semantics
+        if raw_abi["bytecode"]:
+            semantics[contract] = contract_semantics
 
     return contract_semantics
