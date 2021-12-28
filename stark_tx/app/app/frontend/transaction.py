@@ -22,10 +22,14 @@ def route_transaction(
 def starktx_transaction(chain_id: str, transaction_hash: str) -> dict:
     raw_transaction = get_transaction(chain_id, transaction_hash)
     raw_block = (
-        get_block(chain_id, raw_transaction["block_hash"])
-        if "block_hash" in raw_transaction
-        else None
-    ) if raw_transaction["block_hash"] != 'pending' else 'pending'
+        (
+            get_block(chain_id, raw_transaction["block_hash"])
+            if "block_hash" in raw_transaction
+            else None
+        )
+        if raw_transaction["block_hash"] != "pending"
+        else "pending"
+    )
     decoded_transaction = decode_transaction(chain_id, raw_block, raw_transaction)
     print_transaction(decoded_transaction)
 
