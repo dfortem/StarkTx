@@ -1,6 +1,6 @@
 version: "3.6"
 services:
-  starkware:
+  starktx:
     image: '${DOCKER_IMAGE_STARKTX?Variable not set}:${TAG-latest}'
     env_file:
       - .env
