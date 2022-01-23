@@ -1,22 +1,27 @@
 from typing import Optional
 
-from flask import Blueprint, render_template
+from fastapi import APIRouter, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 
 from app.engine.decoders.transaction import decode_transaction
+from app.engine.output import print_transaction
 from app.engine.providers.sequencer import get_transaction, get_block
-from app.frontend import frontend_route
-from app.frontend.output import print_transaction
 
-bp = Blueprint("transactions", __name__)
+router = APIRouter()
+templates = Jinja2Templates(directory="app/templates")
 
 
-@frontend_route(bp, "/<string:tx_hash>/")
-@frontend_route(bp, "/<string:chain_id>/<string:tx_hash>/")
-def route_transaction(
-    tx_hash: str, chain_id: Optional[str] = None
-) -> tuple["render_template", int]:
+@router.get("/{tx_hash}/", response_class=HTMLResponse)
+@router.get("/{chain_id}/{tx_hash}/", response_class=HTMLResponse)
+async def route_transaction(
+    request: Request, tx_hash: str, chain_id: Optional[str] = None
+):
     tx = starktx_transaction(chain_id, tx_hash)
-    return render_template("transaction.html", transaction=tx), 200
+    data = {"transaction": tx}
+    return templates.TemplateResponse(
+        "transaction.html", context={"request": request, "data": data}
+    )
 
 
 def starktx_transaction(chain_id: str, transaction_hash: str) -> dict:

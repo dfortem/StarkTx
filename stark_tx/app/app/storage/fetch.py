@@ -147,13 +147,11 @@ class MemoryPagesFetcher:
                 int.from_bytes(memory_page_hash, "big")
             ]
             memory_pages_tx = self.web3.eth.getTransaction(HexStr(transaction_str))
-            tx_decoded_values = self.memory_page_fact_registry_contract.decode_function_input(
-                memory_pages_tx["input"]
-            )[
-                1
-            ][
-                "values"
-            ]
+            tx_decoded_values = (
+                self.memory_page_fact_registry_contract.decode_function_input(
+                    memory_pages_tx["input"]
+                )[1]["values"]
+            )
             memory_pages.append(tx_decoded_values)
         return memory_pages
 

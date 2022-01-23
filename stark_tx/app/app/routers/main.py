@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 
-from . import static
+from . import index, transaction
 
 router = APIRouter()
-router.include_router(static.router)
+router.include_router(index.router)
+router.include_router(transaction.router)

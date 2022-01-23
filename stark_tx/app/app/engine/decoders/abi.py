@@ -21,8 +21,10 @@ def get_storage_var_address(var_name: str, *args) -> str:
     for arg in args:
         assert isinstance(arg, int), f"Expected arguments to be integers. Found: {arg}."
         res = pedersen_hash(res, arg)
+    address = hex(res % ADDRESS_BOUND)
+    address = "0x" + "0" * (64 - len(address[2:])) + address[2:]
 
-    return hex(res % ADDRESS_BOUND)
+    return address
 
 
 def decode_abi(raw_abi: dict) -> Dict[str, dict]:

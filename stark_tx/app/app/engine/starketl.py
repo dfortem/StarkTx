@@ -2,7 +2,7 @@ import pickle
 
 from app.engine.decoders.transaction import decode_transaction
 from app.engine.providers.sequencer import get_block, get_transaction
-from app.frontend.output import print_transaction
+from app.engine.output import print_transaction
 
 
 def starktx_transaction(transaction_hash: str) -> dict:
