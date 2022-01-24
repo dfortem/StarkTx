@@ -106,6 +106,23 @@
     </div>
 </div>
 
+{% if transaction.events %}
+<div class="calls">
+    <h3>Emitted events:</h3>
+    <div id="ev_tree">
+        <ul class="tree">
+            <li>
+                {% for event in transaction.events %}
+                    <p style="margin-bottom: 5px">
+                        <span>{{event.contract[:10]}}.</span><span style='color: darkgreen'>{{ event.name }}</span><span>({{- print_call_arguments(event.parameters) -}})</span>
+                    </p><br>
+                {% endfor %}
+            </li>
+        </ul>
+    </div>
+</div>
+{% endif %}
+
 <div class="calls">
     <h3>Execution trace:</h3>
     <div id="tree">
@@ -116,9 +133,9 @@
                         <span style='color: red'>({{ transaction.error }})</span>
                     {% endif %}
                     {% if transaction.type == 'INVOKE_FUNCTION' %}
-                        <span>{{- voyager_contract_link(transaction.contract, transaction.contract_name) -}}</span><span style='color: darkgreen'>.{{- transaction.function -}}</span><span>({{- print_call_arguments(transaction.inputs) -}}) => ({{- print_call_arguments(transaction.outputs) -}})</span>
+                        <span>{{- voyager_contract_link(transaction.contract, transaction.contract[:10]) -}}</span><span style='color: darkgreen'>.{{- transaction.function -}}</span><span>({{- print_call_arguments(transaction.inputs) -}}) => ({{- print_call_arguments(transaction.outputs) -}})</span>
                     {% elif transaction.type == 'DEPLOY' %}
-                        <span>Deploy contract: {{ voyager_contract_link(transaction.contract, transaction.contract) }}</span>
+                    <span>{{ voyager_contract_link(transaction.contract, transaction.contract) }}.<span style='color: darkgreen'>deploy</span><span>({{- print_call_arguments(transaction.inputs) -}})</span>
                     {% endif %}
                 </p>
             </li>
@@ -126,21 +143,21 @@
     </div>
 </div>
 
-{% if transaction.l2_to_l1 %}
-    <div class="calls">
-        <h3>L2 to L1 transactions:</h3>
-        <div id="tx_tree">
-            <ul class="tree">
-                <li>
-                    {% for l2_l1_transaction in transaction.l2_to_l1 %}
-                        <p style="margin-bottom: 5px">
-                            <span>{{- voyager_contract_link(l2_l1_transaction.from_address, l2_l1_transaction.from_address[:10]) }} -> {{ etherscan_address_link(l2_l1_transaction.to_address, l2_l1_transaction.to_address|lower) -}}</span><span>({{- l2_l1_transaction.payload  -}})</span>
-                        </p><br>
-                    {% endfor %}
-                </li>
-            </ul>
-        </div>
+{% if transaction.l2_to_l1_messages %}
+<div class="calls">
+    <h3>L2 to L1 transactions:</h3>
+    <div id="tx_tree">
+        <ul class="tree">
+            <li>
+                {% for l2_l1_transaction in transaction.l2_to_l1_messages %}
+                    <p style="margin-bottom: 5px">
+                        <span>{{- voyager_contract_link(l2_l1_transaction.from_address, l2_l1_transaction.from_address[:10]) }} -> {{ etherscan_address_link(l2_l1_transaction.to_address, l2_l1_transaction.to_address|lower) -}}</span><span>({{- l2_l1_transaction.payload  -}})</span>
+                    </p><br>
+                {% endfor %}
+            </li>
+        </ul>
     </div>
+</div>
 {% endif %}
 
 </div>
@@ -148,6 +165,10 @@
 <script>
     $(document).ready(() => {
         $("#tree").fancytree({
+            minExpandLevel: 2,
+            toggleEffect: false,
+        });
+        $("#ev_tree").fancytree({
             minExpandLevel: 2,
             toggleEffect: false,
         });

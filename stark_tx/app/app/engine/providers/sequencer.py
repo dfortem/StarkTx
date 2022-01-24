@@ -11,11 +11,21 @@ from app.engine.types import TStarkNetAPIResponse
 logger = logging.getLogger(__name__)
 
 
-# reads block data from the sequencer
+# reads block data from the sequencer (by hash)
 @lru_cache()
 @starknet_api_handler
-def get_block(chain_id: str, block_id: int) -> TStarkNetAPIResponse:
-    url = f"{SequencerURL[chain_id]}/get_block?blockHash={block_id}"
+def get_block_hash(chain_id: str, block_hash: int) -> TStarkNetAPIResponse:
+    url = f"{SequencerURL[chain_id]}/get_block?blockHash={block_hash}"
+    logger.info("Get_block url: %s", url)
+
+    return requests.get(url)
+
+
+# reads block data from the sequencer (by id)
+@lru_cache()
+@starknet_api_handler
+def get_block_id(chain_id: str, block_id: int) -> TStarkNetAPIResponse:
+    url = f"{SequencerURL[chain_id]}/get_block?blockNumber={block_id}"
     logger.info("Get_block url: %s", url)
 
     return requests.get(url)

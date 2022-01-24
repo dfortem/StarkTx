@@ -318,6 +318,117 @@ span.fancytree-title {
     font-family: monospace;
 }
 
+#ev_tree .ui-fancytree ul {
+    padding-left: 20px;
+}
+
+#ev_tree .ui-fancytree li {
+    list-style-type: none;
+    margin: 5px;
+    position: relative;
+}
+
+#ev_tree .ui-fancytree li::before {
+    content: "";
+    position: absolute;
+    top: -7px;
+    left: 2px;
+    border-left: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0 0 0 0;
+    width: 20px;
+    height: 15px;
+}
+
+#ev_tree .ui-fancytree li::after {
+    position: absolute;
+    content: "";
+    top: 8px;
+    left: 2px;
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    border-radius: 0 0 0 0;
+    width: 20px;
+    height: 100%;
+}
+
+#ev_tree .ui-fancytree li:last-child::after {
+    display: none;
+}
+
+#ev_tree .ui-fancytree li:last-child:before {
+    border-radius: 0 0 0 5px;
+}
+
+#ev_tree ul.ui-fancytree > li:first-child::before {
+    display: none;
+}
+
+#ev_tree ul.ui-fancytree > li:first-child::after {
+    border-radius: 5px 0 0 0;
+}
+
+#ev_tree .ui-fancytree li p {
+    border: 1px #ccc solid;
+    border-radius: 5px;
+    padding: 2px 5px;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+#ev_tree .ui-fancytree li p:hover,
+#ev_tree .ui-fancytree li p:hover + ul li p,
+#ev_tree .ui-fancytree li p:focus,
+#ev_tree .ui-fancytree li p:focus + ul li p {
+    background: #eee;
+    color: #000;
+    border: 1px solid #aaa;
+}
+
+#ev_tree .ui-fancytree li p:hover + ul li::after,
+#ev_tree .ui-fancytree li p:focus + ul li::after,
+#ev_tree .ui-fancytree li p:hover + ul li::before,
+#ev_tree .ui-fancytree li p:focus + ul li::before,
+#ev_tree .ui-fancytree li p:hover + ul::before,
+#ev_tree .ui-fancytree li p:focus + ul::before,
+#ev_tree .ui-fancytree li p:hover + ul ul::before,
+#ev_tree .ui-fancytree li p:focus + ul ul::before {
+    border-color: #999;
+}
+
+#ev_tree .ui-fancytree .fancytree-icon {
+    display: none;
+}
+
+#ev_tree
+.fancytree-plain.fancytree-container.fancytree-treefocus
+span.fancytree-focused
+span.fancytree-title {
+    border-color: transparent;
+}
+
+#ev_tree .fancytree-plain span.fancytree-node span.fancytree-title {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+#ev_tree ul.fancytree-container {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+#ev_tree .fancytree-expander {
+    position: relative;
+    z-index: 2;
+    top: -2px;
+    left: -5px;
+}
+
+#ev_tree * {
+    font-family: monospace;
+}
+
 .back-button-container {
     display: flex;
     align-items: center;
