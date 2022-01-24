@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     # StarkWare
     SEQUENCER_MAINNET: AnyHttpUrl = "https://alpha-mainnet.starknet.io/feeder_gateway"
     SEQUENCER_GOERLI_TESTNET: AnyHttpUrl = "https://alpha4.starknet.io/feeder_gateway"
+    SEQUENCER_INTEGRATION: AnyHttpUrl = "https://external.integration.starknet.io/feeder_gateway"
 
     DEFAULT_SEQUENCER_URL: AnyHttpUrl = SEQUENCER_MAINNET
 
@@ -42,3 +43,4 @@ class SequencerURL(str, Enum, metaclass=EnumValidator):
 
     mainnet = settings.SEQUENCER_MAINNET
     goerli = settings.SEQUENCER_GOERLI_TESTNET
+    integration = settings.SEQUENCER_INTEGRATION

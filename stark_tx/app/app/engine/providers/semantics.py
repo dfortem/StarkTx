@@ -1,5 +1,6 @@
 import json
 from typing import Optional
+from eth_hash.auto import keccak
 
 from app.engine.decoders.abi import decode_abi
 from app.engine.providers.sequencer import get_abi
@@ -34,6 +35,9 @@ def get_semantics(
             contract=contract, name=contract[:10], abi=decoded_abi
         )
         if raw_abi["bytecode"]:
+            code_hash = keccak(bytearray.fromhex(''.join(["{0:0{1}x}".format(int(code, 16), 64)
+                                                          for code in raw_abi["bytecode"]])))
+            contract_semantics['hash'] = '0x' + code_hash.hex()
             semantics[contract] = contract_semantics
 
     return contract_semantics

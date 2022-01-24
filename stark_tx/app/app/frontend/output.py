@@ -22,14 +22,17 @@ def print_transaction(tx):
         )
         log.info(
             "Invoke %s.%s(%s) -> (%s)",
-            tx["contract_name"],
+            tx["contract"],
             tx["function"],
             input_string,
             output_string,
         )
     elif tx["type"] == "DEPLOY":
         log.info("Deploy %s", tx["contract"])
-    for transaction in tx["l2_to_l1"]:
+        input_string = ", ".join(
+            [f"{_input['name']}={_input['value']}" for _input in tx["inputs"]]
+        )
+    for transaction in tx["l2_to_l1_messages"]:
         payload_string = ", ".join(transaction["payload"])
         log.info(
             "L2->L1: %s -> %s (%s)",

@@ -28,6 +28,21 @@ def get_storage_var_address(var_name: str, *args) -> str:
 
 
 def decode_abi(raw_abi: dict) -> Dict[str, dict]:
+
+    def _flatten_parameters(_parameters, _structures):
+        flattened_parameters = []
+        for _parameter in _parameters:
+            if _parameter["type"] in _structures:
+                _parameter["struct_name"] = _parameter["type"]
+                _parameter["struct_members"] = _flatten_parameters(_structures[_parameter["struct_name"]], _structures)
+                _parameter["type"] = "struct"
+            elif _parameter["type"][-1:] == '*' and _parameter["type"][:-1] in _structures:
+                _parameter["struct_name"] = _parameter["type"][:-1]
+                _parameter["struct_members"] = _flatten_parameters(_structures[_parameter["struct_name"]], _structures)
+                _parameter["type"] = "struct*"
+            flattened_parameters.append(_parameter)
+        return flattened_parameters
+
     if "abi" in raw_abi:
         raw_abi = raw_abi["abi"]
 
@@ -40,34 +55,37 @@ def decode_abi(raw_abi: dict) -> Dict[str, dict]:
             ]
 
     functions = dict()
+    events = dict()
     l1_handlers = dict()
     for element in raw_abi:
-        if element["type"] == "function":
-            selector = get_selector_from_name(element["name"])
-            inputs = []
-            for _input in element["inputs"]:
-                if _input["type"] in structures:
-                    _input["struct_name"] = _input["type"]
-                    _input["struct_members"] = structures[_input["struct_name"]]
-                    _input["type"] = "struct"
-                inputs.append(_input)
-            outputs = []
-            for _output in element["outputs"]:
-                if _output["type"] in structures:
-                    _output["struct_name"] = _output["type"]
-                    _output["struct_members"] = structures[_output["struct_name"]]
-                    _output["type"] = "struct"
-                outputs.append(_output)
+
+        if element["type"] == "constructor":
+            inputs = _flatten_parameters(element["inputs"], structures)
+            functions['constructor'] = dict(
+                name=element["name"], inputs=inputs, outputs=dict()
+            )
+
+        elif element["type"] == "function":
+            selector = get_selector_from_name(element["name"]) \
+                if element["name"] != "__default__" else element["name"]
+            inputs = _flatten_parameters(element["inputs"], structures)
+            outputs = _flatten_parameters(element["outputs"], structures)
             functions[selector] = dict(
                 name=element["name"], inputs=inputs, outputs=outputs
             )
 
-        elif element["type"] == "l1_handler":
+        elif element["type"] == "event":
             selector = get_selector_from_name(element["name"])
-            l1_handlers[selector] = dict(
-                name=element["name"],
-                inputs=element["inputs"],
-                outputs=element["outputs"],
+            parameters = _flatten_parameters(element["data"], structures)
+            events[selector] = dict(
+                name=element["name"], keys=element["keys"], parameters=parameters
             )
 
-    return dict(structures=structures, functions=functions, l1_handlers=l1_handlers)
+        elif element["type"] == "l1_handler":
+            selector = get_selector_from_name(element["name"]) \
+                if element["name"] != "__l1_default__" else element["name"]
+            inputs = _flatten_parameters(element["inputs"], structures)
+            outputs = _flatten_parameters(element["outputs"], structures)
+            l1_handlers[selector] = dict(name=element["name"], inputs=inputs, outputs=outputs)
+
+    return dict(structures=structures, functions=functions, events=events, l1_handlers=l1_handlers)

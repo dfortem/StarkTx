@@ -3,7 +3,7 @@ from typing import Optional
 from flask import Blueprint, render_template
 
 from app.engine.decoders.transaction import decode_transaction
-from app.engine.providers.sequencer import get_transaction, get_block
+from app.engine.providers.sequencer import get_transaction, get_block_hash
 from app.frontend import frontend_route
 from app.frontend.output import print_transaction
 
@@ -22,7 +22,7 @@ def route_transaction(
 def starktx_transaction(chain_id: str, transaction_hash: str) -> dict:
     raw_transaction = get_transaction(chain_id, transaction_hash)
     raw_block = (
-        get_block(chain_id, raw_transaction["block_hash"])
+        get_block_hash(chain_id, raw_transaction["block_hash"])
         if "block_hash" in raw_transaction
         else None
     ) if raw_transaction["block_hash"] != 'pending' else 'pending'
