@@ -7,7 +7,7 @@ def decode_parameters(chain_id, parameters, parameters_abi):
     parameters_index = 0
     abi_index = 0
 
-    while parameters_index < len(parameters):
+    while parameters_index < len(parameters) and abi_index < len(parameters_abi):
 
         parameter_type = (
             "address"
@@ -25,6 +25,17 @@ def decode_parameters(chain_id, parameters, parameters_abi):
             value = "{" + create_parameters_string(value) + "}"
             parameters_index += delta
             abi_index += 1
+
+        elif parameter_type == "tuple":
+            name = parameters_abi[abi_index]["name"]
+            value, delta = decode_struct(
+                parameters[parameters_index:],
+                parameters_abi[abi_index]["tuple_members"]
+            )
+            value = "(" + create_parameters_string(value) + ")"
+            parameters_index += delta
+            abi_index += 1
+
         elif parameter_type == "struct*":
             name = parameters_abi[abi_index]["name"]
             value = []
@@ -41,6 +52,24 @@ def decode_parameters(chain_id, parameters, parameters_abi):
                     value.append(fields)
                     parameters_index += delta
             abi_index += 1
+
+        elif parameter_type == "tuple*":
+            name = parameters_abi[abi_index]["name"]
+            value = []
+            if abi_index > 0 and parameters_abi[abi_index-1]["name"] == parameters_abi[abi_index]["name"] + "_len":
+                array_len = decoded_parameters[-1]["value"]
+                decoded_parameters.pop()
+                value = []
+                for _ in range(array_len):
+                    fields, delta = decode_struct(
+                                        parameters[parameters_index:],
+                                        parameters_abi[abi_index]["tuple_members"]
+                                    )
+                    fields = "(" + create_parameters_string(fields) + ")"
+                    value.append(fields)
+                    parameters_index += delta
+            abi_index += 1
+
         else:
             value = decode_atomic_parameter(
                 parameters[parameters_index], parameter_type
@@ -126,7 +155,8 @@ def decode_parameters(chain_id, parameters, parameters_abi):
 def create_parameters_string(parameters):
     parameters_string = ", ".join(
         [
-            f"{_input['name']}={_input['value'] if type(_input['value']) != list else '{' + create_parameters_string(_input['value']) + '}'}"
+            f"{_input['name']+'=' if _input['name'] else ''}"
+            f"{_input['value'] if type(_input['value']) != list else '{'+create_parameters_string(_input['value'])+'}'}"
             for _input in parameters
         ]
     )

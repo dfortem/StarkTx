@@ -32,7 +32,18 @@ def decode_abi(raw_abi: dict) -> Dict[str, dict]:
     def _flatten_parameters(_parameters, _structures):
         flattened_parameters = []
         for _parameter in _parameters:
-            if _parameter["type"] in _structures:
+            _parameter["type"] = _parameter["type"].strip()
+            if _parameter["type"][0] == "(" and _parameter["type"][-1] == ")":
+                _parameter["tuple_members"] = []
+                for _tuple_item in _parameter["type"][1:-1].split(','):
+                    _parameter["tuple_members"] += _flatten_parameters([dict(name="", type=_tuple_item)], _structures)
+                _parameter["type"] = "tuple"
+            elif _parameter["type"][0] == "(" and _parameter["type"][-2:] == ")*":
+                _parameter["tuple_members"] = []
+                for _tuple_item in _parameter["type"][1:-2].split(','):
+                    _parameter["tuple_members"] += _flatten_parameters([dict(name="", type=_tuple_item)], _structures)
+                _parameter["type"] = "tuple*"
+            elif _parameter["type"] in _structures:
                 _parameter["struct_name"] = _parameter["type"]
                 _parameter["struct_members"] = _flatten_parameters(_structures[_parameter["struct_name"]], _structures)
                 _parameter["type"] = "struct"
