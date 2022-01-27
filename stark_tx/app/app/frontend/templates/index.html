@@ -170,7 +170,7 @@
     }
 
     function checkTxHash(tx) {
-        const pattern = new RegExp(/^(0x)?([A-Fa-f0-9]{63})$/)
+        const pattern = new RegExp(/^(0x)?([A-Fa-f0-9]{60,64})$/)
         return pattern.test(tx);
     }
 
