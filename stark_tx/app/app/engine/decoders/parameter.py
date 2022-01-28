@@ -193,7 +193,10 @@ def decode_atomic_parameter(raw_value, parameter_type):
     elif parameter_type == "address":
         parameter_value = hex(int(raw_value))
     elif parameter_type == "timestamp":
-        parameter_value = str(datetime.fromtimestamp(int(raw_value)))[:19]
+        try:
+            parameter_value = str(datetime.fromtimestamp(int(raw_value)))[:19]
+        except:
+            parameter_value = int(raw_value)
     elif parameter_type == "string":
         parameter_value = (
             bytes.fromhex(hex(int(raw_value))[2:]).decode("utf-8").replace("\x00", "")
