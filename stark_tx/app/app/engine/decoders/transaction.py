@@ -53,8 +53,11 @@ def decode_transaction(chain_id: str, block: dict, transaction: dict) -> dict:
     if receipt and 'events' in receipt:
         for event in receipt['events']:
             event_semantics = get_semantics(chain_id, event["from_address"], transaction["block_hash"])
-            selector = hex(int(event['keys'][0]))
-            event_abi = event_semantics["abi"]["events"].get(selector)
+            if len(event['keys']):
+                selector = hex(int(event['keys'][0]))
+                event_abi = event_semantics["abi"]["events"].get(selector)
+            else:
+                event_abi = None
             decoded_transaction['events'].append(decode_event(chain_id, event, event_abi))
 
     decoded_transaction['l2_to_l1_messages'] = receipt['l2_to_l1_messages'] if receipt else []
