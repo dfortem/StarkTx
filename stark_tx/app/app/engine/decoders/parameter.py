@@ -98,56 +98,56 @@ def decode_parameters(chain_id, parameters, parameters_abi):
         decoded_parameters.append(dict(name=name, value=value))
 
     # simple heuristic to detect internal calls
-    if (
-        len(decoded_parameters) >= 3
-        and decoded_parameters[0]["name"] in ("contract_address", "to")
-        and decoded_parameters[1]["name"] in ("function_selector", "selector")
-        and decoded_parameters[2]["name"] == "calldata"
-    ):
-        # these parameters sometimes are a hex string but sometimes are felt
-        contract = (
-            hex(decoded_parameters[0]["value"])
-            if type(decoded_parameters[0]["value"]) == int
-            else decoded_parameters[0]["value"]
-        )
-        selector = (
-            hex(decoded_parameters[1]["value"])
-            if type(decoded_parameters[1]["value"]) == int
-            else decoded_parameters[1]["value"]
-        )
-
-        calldata = (
-            decoded_parameters[2]["value"]
-            if type(decoded_parameters[2]["value"]) == list
-            else [decoded_parameters[2]["value"]]
-        )
-
-        semantics = get_semantics(chain_id, contract)
-        if semantics:
-            function_abi = (
-                semantics["abi"]["functions"][selector]
-                if selector in semantics["abi"]["functions"]
-                else None
-            )
-            if function_abi:
-                function_name = function_abi["name"]
-                function_inputs = decode_parameters(chain_id, calldata, function_abi["inputs"])
-                function_inputs = "{" + create_parameters_string(function_inputs) + "}"
-                additional_parameters = decoded_parameters[3:]
-                decoded_parameters = [
-                    dict(
-                        name="contract",
-                        value=semantics['name']
-                    ),
-                    dict(
-                        name="function",
-                        value=function_name
-                    ),
-                    dict(
-                        name="inputs",
-                        value=function_inputs
-                    )
-                ] + additional_parameters
+    # if (
+    #     len(decoded_parameters) >= 3
+    #     and decoded_parameters[0]["name"] in ("contract_address", "to")
+    #     and decoded_parameters[1]["name"] in ("function_selector", "selector")
+    #     and decoded_parameters[2]["name"] == "calldata"
+    # ):
+    #     # these parameters sometimes are a hex string but sometimes are felt
+    #     contract = (
+    #         hex(decoded_parameters[0]["value"])
+    #         if type(decoded_parameters[0]["value"]) == int
+    #         else decoded_parameters[0]["value"]
+    #     )
+    #     selector = (
+    #         hex(decoded_parameters[1]["value"])
+    #         if type(decoded_parameters[1]["value"]) == int
+    #         else decoded_parameters[1]["value"]
+    #     )
+    #
+    #     calldata = (
+    #         decoded_parameters[2]["value"]
+    #         if type(decoded_parameters[2]["value"]) == list
+    #         else [decoded_parameters[2]["value"]]
+    #     )
+    #
+    #     semantics = get_semantics(chain_id, contract)
+    #     if semantics:
+    #         function_abi = (
+    #             semantics["abi"]["functions"][selector]
+    #             if selector in semantics["abi"]["functions"]
+    #             else None
+    #         )
+    #         if function_abi:
+    #             function_name = function_abi["name"]
+    #             function_inputs = decode_parameters(chain_id, calldata, function_abi["inputs"])
+    #             function_inputs = "{" + create_parameters_string(function_inputs) + "}"
+    #             additional_parameters = decoded_parameters[3:]
+    #             decoded_parameters = [
+    #                 dict(
+    #                     name="contract",
+    #                     value=semantics['name']
+    #                 ),
+    #                 dict(
+    #                     name="function",
+    #                     value=function_name
+    #                 ),
+    #                 dict(
+    #                     name="inputs",
+    #                     value=function_inputs
+    #                 )
+    #             ] + additional_parameters
 
     return decoded_parameters
 
@@ -187,16 +187,22 @@ def decode_struct(raw_values, members):
 
 def decode_atomic_parameter(raw_value, parameter_type):
     if parameter_type == "felt":
-        parameter_value = int(raw_value)
+        if raw_value[:2] == '0x':
+            parameter_value = int(raw_value, 16)
+        else:
+            parameter_value = int(raw_value)
         if parameter_value > 10**40:
             parameter_value = hex(parameter_value)
     elif parameter_type == "address":
-        parameter_value = hex(int(raw_value))
+        if type(raw_value) == int:
+            parameter_value = hex(int(raw_value))
+        else:
+            parameter_value = raw_value
     elif parameter_type == "timestamp":
         try:
-            parameter_value = str(datetime.fromtimestamp(int(raw_value)))[:19]
+            parameter_value = str(datetime.fromtimestamp(int(raw_value, 16)))[:19]
         except:
-            parameter_value = int(raw_value)
+            parameter_value = int(raw_value, 16)
     elif parameter_type == "string":
         parameter_value = (
             bytes.fromhex(hex(int(raw_value))[2:]).decode("utf-8").replace("\x00", "")
