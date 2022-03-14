@@ -1,11 +1,10 @@
 from datetime import datetime
 
-from app.engine.decoders.parameter import decode_parameters
-from app.engine.decoders.event import decode_event
+from app.engine.decoders.trace import decode_trace
 from app.engine.providers.semantics import get_semantics
 
 
-def decode_transaction(chain_id: str, block: dict, transaction: dict) -> dict:
+def decode_transaction(chain_id: str, block: dict, transaction: dict, traces: dict) -> dict:
 
     semantics = get_semantics(
         chain_id,
@@ -29,7 +28,7 @@ def decode_transaction(chain_id: str, block: dict, transaction: dict) -> dict:
 
     decoded_transaction["type"] = transaction["transaction"]["type"]
     decoded_transaction["status"] = transaction["status"]
-    decoded_transaction["contract"] = semantics["contract"]
+
     decoded_transaction["error"] = (
         transaction["transaction_failure_reason"]["error_message"]
         if "transaction_failure_reason" in transaction
@@ -48,75 +47,13 @@ def decode_transaction(chain_id: str, block: dict, transaction: dict) -> dict:
     )
 
     decoded_transaction["transaction_index"] = receipt["transaction_index"] if receipt else None
-
-    decoded_transaction['events'] = []
-    if receipt and 'events' in receipt:
-        for event in receipt['events']:
-            event_semantics = get_semantics(chain_id, event["from_address"], transaction["block_hash"])
-            if len(event['keys']):
-                selector = hex(int(event['keys'][0]))
-                event_abi = event_semantics["abi"]["events"].get(selector)
-            else:
-                event_abi = None
-            decoded_transaction['events'].append(decode_event(chain_id, event, event_abi))
-
     decoded_transaction['l2_to_l1_messages'] = receipt['l2_to_l1_messages'] if receipt else []
 
-    if transaction["transaction"]["type"] == "INVOKE_FUNCTION":
+    decoded_transaction['calls'], decoded_transaction['events'] = \
+        decode_trace(chain_id, transaction["block_hash"], traces["function_invocation"], None, 0)
 
-        decoded_transaction['entry_point_selector'] = transaction["transaction"]["entry_point_selector"]
-        decoded_transaction['entry_point_type'] = transaction["transaction"]["entry_point_type"]
-
-        if decoded_transaction['entry_point_type'] == 'L1_HANDLER':
-            function_abi = semantics["abi"]["l1_handlers"].get(transaction["transaction"]["entry_point_selector"])
-        else:
-            function_abi = semantics["abi"]["functions"].get(transaction["transaction"]["entry_point_selector"])
-
-        if not function_abi:
-            if decoded_transaction['entry_point_type'] == 'L1_HANDLER':
-                function_abi = semantics["abi"]["l1_handlers"].get("__l1_default__")
-            else:
-                function_abi = semantics["abi"]["functions"].get("__default__")
-
-        if function_abi:
-            decoded_transaction["function"] = function_abi["name"]
-            decoded_transaction["inputs"] = decode_parameters(
-                chain_id,
-                transaction["transaction"]["calldata"],
-                function_abi["inputs"]
-            )
-            decoded_transaction["outputs"] = decode_parameters(
-                chain_id,
-                transaction["transaction"].get("outputs", []),
-                function_abi["outputs"],
-            )
-        else:
-            decoded_transaction["function"] = transaction["transaction"]["entry_point_selector"]
-            decoded_transaction["inputs"] = \
-                [dict(name=f'input_{i}', value=value)
-                 for i, value in enumerate(transaction["transaction"]["calldata"])]
-            decoded_transaction["outputs"] = \
-                [dict(name=f'input_{i}', value=value)
-                 for i, value in enumerate(transaction["transaction"].get("outputs", []))]
-
-    elif transaction["transaction"]["type"] == "DEPLOY":
-
-        decoded_transaction['entry_point_selector'] = "constructor"
-        decoded_transaction['entry_point_type'] = "CONSTRUCTOR"
-
-        if "constructor" in semantics["abi"]["functions"]:
-            function_abi = semantics["abi"]["functions"]["constructor"]
-            decoded_transaction["function"] = function_abi["name"]
-            decoded_transaction["inputs"] = decode_parameters(
-                chain_id,
-                transaction["transaction"]['constructor_calldata'],
-                function_abi["inputs"]
-            )
-            decoded_transaction["outputs"] = []
-        else:
-            decoded_transaction["function"] = None
-            decoded_transaction["inputs"] = []
-            decoded_transaction["outputs"] = []
+    if decoded_transaction['events']:
+        decoded_transaction['events'].sort(key=lambda x: x['order'])
 
     decoded_transaction['execution_resources'] = receipt['execution_resources'] if receipt else []
 

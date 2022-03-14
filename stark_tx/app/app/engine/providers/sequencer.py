@@ -41,6 +41,16 @@ def get_transaction(chain_id: str, transaction_hash: str) -> TStarkNetAPIRespons
     return requests.get(url)
 
 
+# reads transaction trace data from the sequencer
+@lru_cache()
+@starknet_api_handler
+def get_transaction_trace(chain_id: str, transaction_hash: str) -> TStarkNetAPIResponse:
+    url = f"{SequencerURL[chain_id]}/get_transaction_trace?transactionHash={transaction_hash}"
+    logger.info("Get_transaction trace: url: %s", url)
+
+    return requests.get(url)
+
+
 # reads the contract data from the sequencer
 @lru_cache()
 @starknet_api_handler
