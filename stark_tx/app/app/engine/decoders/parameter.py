@@ -1,5 +1,4 @@
 from datetime import datetime
-from app.engine.providers.semantics import get_semantics
 
 
 def decode_parameters(chain_id, parameters, parameters_abi):
@@ -96,58 +95,6 @@ def decode_parameters(chain_id, parameters, parameters_abi):
                 abi_index += 1
 
         decoded_parameters.append(dict(name=name, value=value))
-
-    # simple heuristic to detect internal calls
-    # if (
-    #     len(decoded_parameters) >= 3
-    #     and decoded_parameters[0]["name"] in ("contract_address", "to")
-    #     and decoded_parameters[1]["name"] in ("function_selector", "selector")
-    #     and decoded_parameters[2]["name"] == "calldata"
-    # ):
-    #     # these parameters sometimes are a hex string but sometimes are felt
-    #     contract = (
-    #         hex(decoded_parameters[0]["value"])
-    #         if type(decoded_parameters[0]["value"]) == int
-    #         else decoded_parameters[0]["value"]
-    #     )
-    #     selector = (
-    #         hex(decoded_parameters[1]["value"])
-    #         if type(decoded_parameters[1]["value"]) == int
-    #         else decoded_parameters[1]["value"]
-    #     )
-    #
-    #     calldata = (
-    #         decoded_parameters[2]["value"]
-    #         if type(decoded_parameters[2]["value"]) == list
-    #         else [decoded_parameters[2]["value"]]
-    #     )
-    #
-    #     semantics = get_semantics(chain_id, contract)
-    #     if semantics:
-    #         function_abi = (
-    #             semantics["abi"]["functions"][selector]
-    #             if selector in semantics["abi"]["functions"]
-    #             else None
-    #         )
-    #         if function_abi:
-    #             function_name = function_abi["name"]
-    #             function_inputs = decode_parameters(chain_id, calldata, function_abi["inputs"])
-    #             function_inputs = "{" + create_parameters_string(function_inputs) + "}"
-    #             additional_parameters = decoded_parameters[3:]
-    #             decoded_parameters = [
-    #                 dict(
-    #                     name="contract",
-    #                     value=semantics['name']
-    #                 ),
-    #                 dict(
-    #                     name="function",
-    #                     value=function_name
-    #                 ),
-    #                 dict(
-    #                     name="inputs",
-    #                     value=function_inputs
-    #                 )
-    #             ] + additional_parameters
 
     return decoded_parameters
 

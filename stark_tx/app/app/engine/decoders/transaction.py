@@ -6,12 +6,6 @@ from app.engine.providers.semantics import get_semantics
 
 def decode_transaction(chain_id: str, block: dict, transaction: dict, traces: dict) -> dict:
 
-    semantics = get_semantics(
-        chain_id,
-        transaction["transaction"]["contract_address"],
-        transaction["block_hash"],
-    )
-
     decoded_transaction = dict()
     decoded_transaction["chain_id"] = chain_id
     decoded_transaction["block_number"] = transaction["block_number"] if "block_number" in transaction else None
