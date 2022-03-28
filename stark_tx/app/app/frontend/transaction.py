@@ -29,10 +29,7 @@ def starktx_transaction(chain_id: str, transaction_hash: str) -> dict:
         else None
     ) if raw_transaction["block_hash"] != 'pending' else 'pending'
 
-    if chain_id in ('integration', 'goerli'):
-        raw_traces = get_transaction_trace(chain_id, transaction_hash)
-    else:
-        raw_traces = None
+    raw_traces = get_transaction_trace(chain_id, transaction_hash)
 
     if not raw_traces or not raw_traces['function_invocation']['selector']:
         raw_traces = dict(function_invocation=

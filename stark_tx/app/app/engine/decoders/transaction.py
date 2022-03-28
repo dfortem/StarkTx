@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from app.engine.decoders.trace import decode_trace
-from app.engine.providers.semantics import get_semantics
 
 
 def decode_transaction(chain_id: str, block: dict, transaction: dict, traces: dict) -> dict:
