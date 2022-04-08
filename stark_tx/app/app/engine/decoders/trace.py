@@ -28,7 +28,8 @@ def decode_trace(chain_id: str, block_hash: str, trace: dict, trace_id: str or N
         function_abi = semantics["abi"]["functions"].get(trace["selector"])
         if not function_abi and '__default__' in semantics["abi"]["functions"]:
             function_abi = semantics["abi"]["functions"]['__default__']
-            if function_abi['inputs'][1]['name'] == 'calldata_size':
+            if function_abi['inputs'][1]['name'] == 'calldata_size' or \
+               (len(trace['calldata']) > 2 and int(trace['calldata'][1], 16) != len(trace['calldata']) - 2):
                 trace['calldata'].insert(0, hex(len(trace["calldata"])))
                 trace['calldata'].insert(0, trace["selector"])
                 function_abi['inputs'][1]['name'] = 'calldata_len'
