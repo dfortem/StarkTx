@@ -13,8 +13,7 @@
 
 ## Live version
 
-Live version of StarkTx is available here [http://starktx.info/](http://starktx.info/), with source code released
-here [StarkWare](https://github.com/TokenFlowInsights/StarkWare)
+Live version of StarkTx is available here [http://starktx.info/](http://starktx.info/).
 
 ## Backend Requirements
 

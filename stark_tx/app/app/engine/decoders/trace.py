@@ -3,7 +3,7 @@ from app.engine.decoders.event import decode_event
 from app.engine.providers.semantics import get_semantics
 
 
-def decode_trace(chain_id: str, block_hash: str, trace: dict, trace_id: str or None, indent: int) -> dict:
+def decode_trace(chain_id: str, block_hash: str, trace: dict, trace_id: str or None, indent: int) -> tuple:
 
     semantics = get_semantics(
         chain_id,

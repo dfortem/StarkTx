@@ -8,7 +8,7 @@ from app.engine.providers.status import SequencerStatus
 from app.engine.types import TStarkNetAPIHandler, TStarkNetAPIResponse
 
 
-# TODO: definitely handle theses trash requests exceptions
+# TODO: definitely handle these trash requests exceptions
 def starknet_api_handler(
     func: Callable[..., TStarkNetAPIHandler]
 ) -> Callable[..., TStarkNetAPIHandler]:
