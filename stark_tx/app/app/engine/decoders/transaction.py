@@ -6,7 +6,7 @@ from app.engine.decoders.trace import decode_trace
 def decode_transaction(chain_id: str, block: dict, transaction: dict, traces: dict) -> dict:
 
     decoded_transaction = dict()
-    decoded_transaction["chain_id"] = chain_id
+    decoded_transaction["chain_id"] = chain_id or 'mainnet'
     decoded_transaction["block_number"] = transaction["block_number"] if "block_number" in transaction else None
     decoded_transaction["block_hash"] = transaction["block_hash"] if "block_hash" in transaction else None
 

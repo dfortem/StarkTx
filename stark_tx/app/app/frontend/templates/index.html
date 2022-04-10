@@ -132,8 +132,9 @@
         <div>
             <label for="net">Network</label>
             <select class="input select" id="net">
-                <option value="mainnet">Mainnet</option>
-                <option value="goerli">Goerli testnet</option>
+                {% for name, _ in config %}
+                    <option value="{{name}}">{{name}}</option>
+                {% endfor %}
             </select>
         </div>
         <div>
@@ -146,7 +147,6 @@
         <div class="tx-submit">
             <input id="tx_submit" type="submit" value="Decode now">
         </div>
-
     </form>
 </div>
 
