@@ -5,7 +5,6 @@ from flask import Blueprint, render_template
 from app.engine.decoders.transaction import decode_transaction
 from app.engine.providers.sequencer import get_transaction, get_block_hash, get_transaction_trace
 from app.frontend import frontend_route
-from app.frontend.output import print_transaction
 
 bp = Blueprint("transactions", __name__)
 

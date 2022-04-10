@@ -7,16 +7,18 @@ from app.base_exceptions import NotSupportedChainError
 
 
 class Settings(BaseSettings):
+
     SECRET_KEY: str = secrets.token_urlsafe(32)
-    # 60 minutes * 24 hours * 8 days = 8 days
+    # 60 minutes * 24 hours * 8 days
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
 
-    # StarkWare
-    SEQUENCER_MAINNET: AnyHttpUrl = "https://alpha-mainnet.starknet.io/feeder_gateway"
-    SEQUENCER_GOERLI_TESTNET: AnyHttpUrl = "https://alpha4.starknet.io/feeder_gateway"
-    SEQUENCER_INTEGRATION: AnyHttpUrl = "https://external.integration.starknet.io/feeder_gateway"
+    # StarkNet environments
+    SEQUENCERS = dict()
+    SEQUENCERS['mainnet']: AnyHttpUrl = "https://alpha-mainnet.starknet.io/feeder_gateway"
+    SEQUENCERS['testnet']: AnyHttpUrl = "https://alpha4.starknet.io/feeder_gateway"
+    SEQUENCERS['integration']: AnyHttpUrl = "https://external.integration.starknet.io/feeder_gateway"
 
-    DEFAULT_SEQUENCER_URL: AnyHttpUrl = SEQUENCER_MAINNET
+    DEFAULT_SEQUENCER_URL: AnyHttpUrl = SEQUENCERS['mainnet']
 
     PROJECT_NAME: str
 
@@ -39,8 +41,9 @@ class EnumValidator(EnumMeta):
 
 
 class SequencerURL(str, Enum, metaclass=EnumValidator):
+
     DEFAULT = settings.DEFAULT_SEQUENCER_URL
 
-    mainnet = settings.SEQUENCER_MAINNET
-    goerli = settings.SEQUENCER_GOERLI_TESTNET
-    integration = settings.SEQUENCER_INTEGRATION
+    mainnet = settings.SEQUENCERS['mainnet']
+    testnet = settings.SEQUENCERS['testnet']
+    integration = settings.SEQUENCERS['integration']
