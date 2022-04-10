@@ -2,10 +2,9 @@
 
 ### Tasks:
 
-- [ ] Refactor `chain_id` parameter
-- [ ] Add wrapper for `requests` exceptions
 - [x] Add `voyager` links
+- [x] Add easy configuration of chains
 
-### Hmmm
+### Hmmm...
 
 - [ ] Maybe replace flask with fastapi?
