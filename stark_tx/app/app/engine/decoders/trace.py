@@ -47,8 +47,10 @@ def decode_trace(chain_id: str, block_hash: str, trace: dict, trace_id: str or N
                 trace['calldata'].insert(0, hex(len(trace["calldata"])))
                 trace['calldata'].insert(0, trace["selector"])
                 function_abi['inputs'][1]['name'] = 'calldata_len'
-            if function_abi['outputs'][0]['name'] == 'retdata_size':
+            if function_abi['outputs'][0]['name'] == 'retdata_size' or \
+               (len(trace['result']) > 0 and int(trace['result'][0], 16) != len(trace['result']) - 2):
                 function_abi['outputs'][0]['name'] = 'retdata_len'
+                trace['result'].insert(0, hex(len(trace["result"])))
 
         if function_abi:
             decoded_trace["function"] = function_abi["name"]
