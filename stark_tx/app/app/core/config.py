@@ -31,16 +31,6 @@ class Settings(BaseSettings):
     SEQUENCERS['mainnet']: AnyHttpUrl = "https://alpha-mainnet.starknet.io/feeder_gateway"
     SEQUENCERS['testnet']: AnyHttpUrl = "https://alpha4.starknet.io/feeder_gateway"
     SEQUENCERS['integration']: AnyHttpUrl = "https://external.integration.starknet.io/feeder_gateway"
-    SEQUENCERS['hackathon_0']: AnyHttpUrl = "https://hackathon-0.starknet.io/feeder_gateway"
-    SEQUENCERS['hackathon_1']: AnyHttpUrl = "https://hackathon-1.starknet.io/feeder_gateway"
-    SEQUENCERS['hackathon_2']: AnyHttpUrl = "https://hackathon-2.starknet.io/feeder_gateway"
-    SEQUENCERS['hackathon_3']: AnyHttpUrl = "https://hackathon-3.starknet.io/feeder_gateway"
-    SEQUENCERS['hackathon_4']: AnyHttpUrl = "https://hackathon-4.starknet.io/feeder_gateway"
-    SEQUENCERS['hackathon_5']: AnyHttpUrl = "https://hackathon-5.starknet.io/feeder_gateway"
-    SEQUENCERS['hackathon_6']: AnyHttpUrl = "https://hackathon-6.starknet.io/feeder_gateway"
-    SEQUENCERS['hackathon_7']: AnyHttpUrl = "https://hackathon-7.starknet.io/feeder_gateway"
-    SEQUENCERS['hackathon_8']: AnyHttpUrl = "https://hackathon-8.starknet.io/feeder_gateway"
-    SEQUENCERS['hackathon_9']: AnyHttpUrl = "https://hackathon-9.starknet.io/feeder_gateway"
 
     DEFAULT_SEQUENCER_URL: AnyHttpUrl = SEQUENCERS['mainnet']
 
@@ -71,13 +61,3 @@ class SequencerURL(str, Enum, metaclass=EnumValidator):
     mainnet = settings.SEQUENCERS['mainnet']
     testnet = settings.SEQUENCERS['testnet']
     integration = settings.SEQUENCERS['integration']
-    hackathon_0 = settings.SEQUENCERS['hackathon_0']
-    hackathon_1 = settings.SEQUENCERS['hackathon_1']
-    hackathon_2 = settings.SEQUENCERS['hackathon_2']
-    hackathon_3 = settings.SEQUENCERS['hackathon_3']
-    hackathon_4 = settings.SEQUENCERS['hackathon_4']
-    hackathon_5 = settings.SEQUENCERS['hackathon_5']
-    hackathon_6 = settings.SEQUENCERS['hackathon_6']
-    hackathon_7 = settings.SEQUENCERS['hackathon_7']
-    hackathon_8 = settings.SEQUENCERS['hackathon_8']
-    hackathon_9 = settings.SEQUENCERS['hackathon_9']
