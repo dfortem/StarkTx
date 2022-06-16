@@ -28,11 +28,15 @@ class Settings(BaseSettings):
 
     # StarkNet environments
     SEQUENCERS = dict()
-    SEQUENCERS['mainnet']: AnyHttpUrl = "https://alpha-mainnet.starknet.io/feeder_gateway"
-    SEQUENCERS['testnet']: AnyHttpUrl = "https://alpha4.starknet.io/feeder_gateway"
-    SEQUENCERS['integration']: AnyHttpUrl = "https://external.integration.starknet.io/feeder_gateway"
+    SEQUENCERS[
+        "mainnet"
+    ]: AnyHttpUrl = "https://alpha-mainnet.starknet.io/feeder_gateway"
+    SEQUENCERS["testnet"]: AnyHttpUrl = "https://alpha4.starknet.io/feeder_gateway"
+    SEQUENCERS[
+        "integration"
+    ]: AnyHttpUrl = "https://external.integration.starknet.io/feeder_gateway"
 
-    DEFAULT_SEQUENCER_URL: AnyHttpUrl = SEQUENCERS['mainnet']
+    DEFAULT_SEQUENCER_URL: AnyHttpUrl = SEQUENCERS["mainnet"]
 
     PROJECT_NAME: str
 
@@ -58,6 +62,6 @@ class SequencerURL(str, Enum, metaclass=EnumValidator):
 
     DEFAULT = settings.DEFAULT_SEQUENCER_URL
 
-    mainnet = settings.SEQUENCERS['mainnet']
-    testnet = settings.SEQUENCERS['testnet']
-    integration = settings.SEQUENCERS['integration']
+    mainnet = settings.SEQUENCERS["mainnet"]
+    testnet = settings.SEQUENCERS["testnet"]
+    integration = settings.SEQUENCERS["integration"]

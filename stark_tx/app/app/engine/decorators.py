@@ -26,7 +26,7 @@ from app.engine.types import TStarkNetAPIHandler, TStarkNetAPIResponse
 def starknet_api_handler(
     func: Callable[..., TStarkNetAPIHandler]
 ) -> Callable[..., TStarkNetAPIHandler]:
-    """ StarkNet API handler."""
+    """StarkNet API handler."""
 
     @wraps(func)
     def wrapped(*args, **kwargs) -> TStarkNetAPIResponse:
